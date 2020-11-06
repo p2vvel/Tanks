@@ -1,4 +1,5 @@
 ﻿#include "tank_barrel.h"
+#include "muzzle_flash.h"
 
 #include "tank.h"
 #include "engine.h"
@@ -11,7 +12,7 @@ Tank_barrel::Tank_barrel(const sf::Sprite& barrel_sprite, Bullet_base* pattern, 
 	barrel_body->setOrigin(barrel_body->getGlobalBounds().width / 2, barrel_body->getGlobalBounds().height * 0.30);
 	angle = 0;
 
-	barrel_body->setScale(1, -1);	//bez tego lufa by³aby odwrócona w przeciwnym kierunku ni¿ myszka
+	barrel_body->setScale(1, -1);	//bez tego lufa by³lby odwrócona w przeciwnym kierunku ni¿ myszka
 
 	muzzle_flash = flash_pattern;
 	shot_interval = time_between_shots;
@@ -27,6 +28,13 @@ Tank_barrel::~Tank_barrel()
 
 void Tank_barrel::update()
 {
+	if (muzzle_flash != nullptr && muzzle_flash->get_visibility())
+	{
+		float distance_from_barrel_center = abs(barrel_body->getOrigin().y - barrel_body->getLocalBounds().height);
+		sf::Vector2f flash_position = barrel_body->getPosition() + Engine::calculate_vector(distance_from_barrel_center, angle);
+
+		muzzle_flash->update(flash_position, angle);
+	}
 
 	barrel_body->setRotation(angle);
 	barrel_body->setPosition(position);
@@ -34,6 +42,8 @@ void Tank_barrel::update()
 
 void Tank_barrel::draw(sf::RenderWindow& window)
 {
+	if (muzzle_flash != nullptr)
+		muzzle_flash->draw(window);
 
 	window.draw(*barrel_body);
 }
@@ -43,6 +53,9 @@ bool Tank_barrel::shot()
 	if (timer.getElapsedTime() >= shot_interval)
 	{
 		timer.restart();
+
+		if (muzzle_flash != nullptr)
+			muzzle_flash->set_visibility(true);
 
 		return true;
 	}

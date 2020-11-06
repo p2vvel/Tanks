@@ -41,7 +41,7 @@ void Engine::test()
 
 
 
-	Tank* tank = generate_Tank(tank_color::red, barrel_size::big);
+	Tank* tank = generate_Tank(tank_color::green, barrel_size::big);
 
 	tank->set_position(sf::Vector2f(100, 100));
 

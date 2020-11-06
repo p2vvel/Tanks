@@ -84,21 +84,25 @@ Tank_barrel* Engine::generate_Barrel(const Engine::tank_color& color, const Engi
 
 	sf::Sprite barrel_sprite(storage.texture_hq, texture_rect);
 	sf::Time shot_period;
+	Muzzle_flash* flash;// = new Muzzle_flash()
 
 	if (size == Engine::barrel_size::small)
 	{
 		shot_period = sf::seconds(0.4);
+		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotThin), 8);
 	}
 	else if (size == Engine::barrel_size::medium)
 	{
 		shot_period = sf::seconds(0.8);
+		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
 	else	//barrel_size == big
 	{
 		shot_period = sf::seconds(1.2);
+		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
 
-	return new Tank_barrel(sf::Sprite(storage.texture_hq, texture_rect), (generate_Bullet_base(color, size)), shot_period);
+	return new Tank_barrel(sf::Sprite(storage.texture_hq, texture_rect), (generate_Bullet_base(color, size)), shot_period, flash);
 }
 
 
@@ -231,7 +235,6 @@ Tank* Engine::generate_Tank(const Engine::tank_color& color, const Engine::barre
 	{
 		texture_rect = GET_SPRITE_HQ(tankBody_dark_outline);
 	}
-
 
 	return new Tank(sf::Sprite(storage.texture_hq, texture_rect), generate_Barrel(color, size));
 }

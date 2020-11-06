@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "tank_barrel.h"
 #include "tank.h"
+#include "muzzle_flash.h"
 #include "bullet.h"
 
 
@@ -37,8 +38,8 @@ public:
 
 
 
-	enum class tank_color { blue, dark, green, red, sand };
-	enum class barrel_size { big, medium, small };
+	enum tank_color { blue, dark, green, red, sand };
+	enum barrel_size { big, medium, small };
 	Tank_barrel* generate_Barrel(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 	Bullet_base* generate_Bullet_base(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 	Tank* generate_Tank(const Engine::tank_color& color, const Engine::barrel_size& size) const;

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClInclude Include="bullet.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="muzzle_flash.h" />
     <ClInclude Include="storage.h" />
     <ClInclude Include="tank.h" />
     <ClInclude Include="tank_barrel.h" />
