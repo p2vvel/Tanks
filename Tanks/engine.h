@@ -37,6 +37,9 @@ public:
 
 
 
-	enum tank_color { blue, dark, green, red, sand };
-	enum barrel_size { big, medium, small };
+	enum class tank_color { blue, dark, green, red, sand };
+	enum class barrel_size { big, medium, small };
+	Tank_barrel* generate_Barrel(const Engine::tank_color& color, const Engine::barrel_size& size) const;
+	Bullet_base* generate_Bullet_base(const Engine::tank_color& color, const Engine::barrel_size& size) const;
+	Tank* generate_Tank(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 };

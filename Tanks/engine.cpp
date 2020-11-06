@@ -41,10 +41,7 @@ void Engine::test()
 
 
 
-	Tank* tank = new Tank(
-		sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBody_blue_outline)), new Tank_barrel(sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBlue_barrel2_outline)), new Bullet_base(sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(bulletBlue3_outline)), 20, 30), sf::seconds(0.2)));
-
-
+	Tank* tank = generate_Tank(tank_color::red, barrel_size::big);
 
 	tank->set_position(sf::Vector2f(100, 100));
 
