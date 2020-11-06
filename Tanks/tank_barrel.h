@@ -7,7 +7,10 @@
 
 
 
+class Bullet_base;
+class Bullet;
 class Tank;
+class Muzzle_flash;
 
 class Tank_barrel
 {
@@ -18,11 +21,13 @@ class Tank_barrel
 	sf::Vector2f position;
 	sf::Sprite* barrel_body;
 
+	Muzzle_flash* muzzle_flash;
+	Bullet_base* bullet_pattern;
 
 	sf::Clock timer;
 	sf::Time shot_interval;	//czas pomiedzy koelnymi strzalami
 public:
-	Tank_barrel(const sf::Sprite& barrel_sprite, const sf::Time& time_between_shots);
+	Tank_barrel(const sf::Sprite& barrel_sprite, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern = nullptr);
 	~Tank_barrel();
 
 
@@ -38,4 +43,6 @@ public:
 	void draw(sf::RenderWindow& window);
 
 	bool shot();
+
+	Bullet* generate_bullet() const;
 };

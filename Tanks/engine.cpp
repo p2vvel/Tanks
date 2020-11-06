@@ -42,12 +42,15 @@ void Engine::test()
 
 
 	Tank* tank = new Tank(
-		sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBody_blue_outline)), new Tank_barrel(sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBlue_barrel2_outline)),sf::seconds(0.8)));
+		sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBody_blue_outline)), new Tank_barrel(sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(tankBlue_barrel2_outline)), new Bullet_base(sf::Sprite(storage.texture_hq, GET_SPRITE_HQ(bulletBlue3_outline)), 20, 30), sf::seconds(0.2)));
+
 
 
 	tank->set_position(sf::Vector2f(100, 100));
 
 
+
+	std::vector<Bullet*> bullets;
 
 
 	sf::Event ev;
@@ -69,14 +72,19 @@ void Engine::test()
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			if (tank->barrel->shot())
-				std::cout << "SHOT";
+				bullets.push_back(tank->barrel->generate_bullet());
+
 
 		tank->update();
 
 
 		window->clear(sf::Color(13, 23, 36));
 
-		
+		for (auto a : bullets)
+		{
+			a->update();
+			a->draw(*window);
+		}
 		tank->draw(*window);
 
 
@@ -112,9 +120,6 @@ void Engine::control_tank(Tank& tank)
 		tank.turn_right();
 
 	tank.barrel->set_angle(Engine::mouse_aim_angle(*tank.barrel));
-
-	/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		tank.barrel->shot();//*/
 }
 
 

@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "tank_barrel.h"
 #include "tank.h"
+#include "bullet.h"
 
 
 #include<vector>
@@ -33,4 +34,9 @@ public:
 
 
 	void test();
+
+
+
+	enum tank_color { blue, dark, green, red, sand };
+	enum barrel_size { big, medium, small };
 };
