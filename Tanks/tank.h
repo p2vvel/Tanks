@@ -4,6 +4,7 @@
 
 #include<cmath>
 
+#include "skidmarks.h"
 
 class Engine;
 class Tank_barrel;
@@ -33,9 +34,10 @@ class Tank
 
 	sf::Sprite* tank_body;
 
+	Skidmarks* skidmarks;	//slad po gasienicach - sa opcjonalne
 
 public:
-	Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel);
+	Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
 	~Tank();
 
 	void set_position(const sf::Vector2f& new_pos);

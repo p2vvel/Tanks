@@ -236,5 +236,8 @@ Tank* Engine::generate_Tank(const Engine::tank_color& color, const Engine::barre
 		texture_rect = GET_SPRITE_HQ(tankBody_dark_outline);
 	}
 
-	return new Tank(sf::Sprite(storage.texture_hq, texture_rect), generate_Barrel(color, size));
+	sf::IntRect skidmarks_rect = GET_SPRITE_HQ(tracksLarge);
+	skidmarks_rect.height = 6;
+
+	return new Tank(sf::Sprite(storage.texture_hq, texture_rect), generate_Barrel(color, size), new Skidmarks(new sf::Sprite(storage.texture_hq, skidmarks_rect), 40, 8));
 }

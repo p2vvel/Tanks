@@ -11,7 +11,7 @@
 
 
 
-Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel)
+Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* marks)
 {
 	tank_body = new sf::Sprite(tank_sprite);
 	tank_body->setOrigin(tank_body->getGlobalBounds().width / 2, tank_body->getGlobalBounds().height / 2);
@@ -22,6 +22,7 @@ Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel)
 
 	handling = 0.6;
 
+	skidmarks = marks;
 }
 
 
@@ -81,6 +82,8 @@ void Tank::update()
 	barrel->set_position(position);
 	barrel->update();
 
+	if (skidmarks != nullptr)
+		skidmarks->update(this->position, this->angle);	//zostawia slady po gasienicach - opcjonalne
 
 
 	if (speed >= IDLE_SPEED_LOSS || speed <= -IDLE_SPEED_LOSS)
@@ -92,6 +95,9 @@ void Tank::update()
 
 void Tank::draw(sf::RenderWindow& win)
 {
+	if (skidmarks != nullptr)
+		skidmarks->draw(win);
+
 	win.draw(*tank_body);
 	barrel->draw(win);
 }

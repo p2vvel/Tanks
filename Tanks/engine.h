@@ -5,6 +5,7 @@
 #include "storage.h"
 #include "tank_barrel.h"
 #include "tank.h"
+#include "skidmarks.h"
 #include "muzzle_flash.h"
 #include "bullet.h"
 
