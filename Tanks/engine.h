@@ -13,10 +13,15 @@
 #include<vector>
 #include <cmath>
 
+#include "net_client.h"
+
 
 
 #define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
 
+
+#define ADDRESS "127.0.0.1"
+#define PORT 3003
 
 
 class Engine
@@ -24,6 +29,7 @@ class Engine
 	Storage storage;
 	sf::RenderWindow* window;
 
+	NetClient *net_client;
 
 	short mouse_aim_angle(const Tank_barrel& barrel);
 	void control_tank(Tank& tank);

@@ -12,12 +12,13 @@ Engine::Engine()
 Engine::Engine(sf::RenderWindow& win)
 {
 	window = &win;
+	net_client = new NetClient(PORT, ADDRESS);
 }
 
 
 Engine::~Engine()
 {
-	//pass
+	delete net_client;
 };
 
 
@@ -50,9 +51,17 @@ void Engine::test()
 	std::vector<Bullet*> bullets;
 
 
+	std::thread net_thread_tcp(&NetClient::listenTCP, net_client);
+	std::thread net_thread_udp(&NetClient::listenUDP, net_client);
+
 	sf::Event ev;
 	while (window->isOpen())
 	{
+		net_client->setListeningMode(true);
+
+
+
+
 		while (window->pollEvent(ev))
 		{
 			if (ev.type == sf::Event::Closed || (ev.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
@@ -88,7 +97,11 @@ void Engine::test()
 
 
 		window->display();
+		net_client->setListeningMode(false);
+
 	}
+	net_thread_tcp.join();
+	net_thread_udp.join();
 
 }
 
