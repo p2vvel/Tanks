@@ -1,7 +1,10 @@
 #pragma once
 
-#include<SFML/Graphics.hpp>
 
+#include<nlohmann/json.hpp>
+#include "data_serializers.h"
+
+#include<SFML/Graphics.hpp>
 #include<cmath>
 
 #include "skidmarks.h"
@@ -19,6 +22,9 @@ class Tank_barrel;
 
 class Tank
 {
+	friend void to_json(nlohmann::json& j, const Tank& tank);
+	friend void from_json(const nlohmann::json& j, Tank& tank);
+
 	friend class Engine;
 
 	unsigned char max_speed;

@@ -42,6 +42,8 @@ class TanksServer{
 		}, 1000);
 
 		this.players = [];
+
+		this.data = [];
 	}
 
 	handleConnectionTCP(connection) {
@@ -81,7 +83,8 @@ class TanksServer{
 	}
 
 	handleReceiveUDP(msg, rinfo){
-		console.log(`New UDP message: ${msg}\nFrom: ${rinfo}`);
+		this.data.push(JSON.parse(msg))
+		console.log(`New UDP message: ${this.data[this.data.length - 1]}\nFrom: ${rinfo}`);
 	}
 
 	handleListeningUDP() {

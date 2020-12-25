@@ -13,6 +13,8 @@
 #include<vector>
 #include <cmath>
 
+#include "data_serializers.h"
+
 #include "net_client.h"
 
 

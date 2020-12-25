@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="data_serializers.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="engine_generators.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="data_serializers.h" />
     <ClInclude Include="engine.h" />
     <ClInclude Include="muzzle_flash.h" />
     <ClInclude Include="net_client.h" />

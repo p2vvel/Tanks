@@ -6,6 +6,8 @@
 
 
 
+#include "data_serializers.h"
+
 
 class Bullet_base;
 class Bullet;
@@ -14,6 +16,10 @@ class Muzzle_flash;
 
 class Tank_barrel
 {
+
+	friend void to_json(nlohmann::json& j, const Tank_barrel& barrel);
+	friend void from_json(const nlohmann::json& j, Tank_barrel& barrel);
+
 	friend class Tank;
 	friend class Engine;
 
@@ -45,4 +51,6 @@ public:
 	bool shot();
 
 	Bullet* generate_bullet() const;
+
+
 };

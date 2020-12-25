@@ -137,4 +137,20 @@ public:
 				this->readDataUDP();
 		} while (true);
 	}
+
+	bool sendDataTCP(const char* data, const unsigned short& data_size) {
+		sf::Socket::Status status = this->tcp.send(data, data_size);
+		if (status != sf::Socket::Status::Done)
+			return false;
+		else
+			return true;
+	}
+
+	bool sendDataUDP(const char* data, const unsigned short& data_size) {
+		sf::Socket::Status status = this->udp.send(data, data_size, this->server_address, this->server_port);
+		if (status != sf::Socket::Status::Done)
+			return false;
+		else
+			return true;
+	}
 };

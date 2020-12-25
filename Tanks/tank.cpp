@@ -98,6 +98,7 @@ void Tank::draw(sf::RenderWindow& win)
 	if (skidmarks != nullptr)
 		skidmarks->draw(win);
 
+
 	win.draw(*tank_body);
 	barrel->draw(win);
 }

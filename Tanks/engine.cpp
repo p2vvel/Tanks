@@ -93,12 +93,13 @@ void Engine::test()
 		}
 		tank->draw(*window);
 
+		nlohmann::json j = *tank;
 
 
 
 		window->display();
 		net_client->setListeningMode(false);
-
+		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
 	}
 	net_thread_tcp.join();
 	net_thread_udp.join();
