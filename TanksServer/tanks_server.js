@@ -40,24 +40,21 @@ class TanksServer{
 
 		setInterval( () => {
 
-
 			// console.log(this.data.players)
 			for(let index in this.data.players)
 			{
 				this.data.players[index].write(`\nGraczor #${index}`);
 				console.log(index)
 			}
-			
 
-			// for (let i = 0; i < this.players_counter; i++)
-			// 	this.players[i].write(`\nGraczor #${i}`);
 		}, 1000);
 
 
 
 		this.players_counter = 0;
 		this.data = {};
-		this.data.players = {};
+		this.data.players = {};	//players connection
+		this.data.players_data = {};	//current player data
 	}
 
 	handleConnectionTCP(connection) {
@@ -66,8 +63,7 @@ class TanksServer{
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
 		connection.on("close", (e) => { 
-			console.log("ELO: ",connection.id)
-			// connection.destroy();
+			console.log("Player disconnected: ",connection.id)
 			delete this.data.players[connection.id];
 		});
 		
@@ -88,7 +84,9 @@ class TanksServer{
 	
 
 	handleDataTCP(data) {
-		// console.log(`Received new data: ${data}`);
+		let temp_data = JSON.stringify(data);
+		console.log(`Received data from player #${temp_data.id}`);
+		this.data.players_data[temp_data.id] = temp_data;
 	}
 
 	handleListeningTCP() {
