@@ -65,7 +65,11 @@ class TanksServer{
 		// this.players.push(connection);
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
-		connection.on("close", this.handleDisconnectTCP.apply(this, [this.players_counter]));
+		connection.on("close", (e) => { 
+			console.log("ELO: ",connection.id)
+			// connection.destroy();
+			delete this.data.players[connection.id];
+		});
 		
 		connection.id = this.players_counter;	//saves id data in connection object
 		this.data.players[this.players_counter] = connection;	//saves connection object(player connection)
