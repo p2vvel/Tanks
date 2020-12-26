@@ -6,6 +6,7 @@
 Engine::Engine()
 {
 	//pass
+	//my_id = ' ';
 };
 
 
@@ -65,7 +66,13 @@ void Engine::test()
 		while (window->pollEvent(ev))
 		{
 			if (ev.type == sf::Event::Closed || (ev.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
+			{
 				window->close();
+				net_client->setListeningMode(false);
+				net_thread_tcp.detach();
+				net_thread_udp.detach();
+				return;
+			}
 		}
 
 
@@ -93,14 +100,18 @@ void Engine::test()
 		}
 		tank->draw(*window);
 
-		nlohmann::json j = *tank;
 
+
+
+		nlohmann::json j = *tank;
+		j["id"] = net_client->getID();
 
 
 		window->display();
 		net_client->setListeningMode(false);
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
 	}
+
 	net_thread_tcp.join();
 	net_thread_udp.join();
 

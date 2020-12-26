@@ -6,6 +6,8 @@
 #include<limits>
 #include<nlohmann/json.hpp>
 
+#include<cstdlib>
+
 #define BUFFER_SIZE USHRT_MAX
 
 using nlohmann::json;
@@ -23,13 +25,14 @@ class NetClient
 	json* json_buffer;
 
 	bool listening_mode;	//indicates if sockets should try to read incoming data
+	unsigned short my_id;
 
 
-	//returns slice of char array
+	//returns slice of char array 4
 	static char* substring(const char* str, const unsigned short& length, const unsigned char& end, const unsigned char& start = 0) {
 		if (end > length || end <= start) {
 			char* temp = new char[1];
-			temp[0] = '\0';;
+			temp[0] = '\0';
 			return temp;
 		};
 
@@ -46,111 +49,18 @@ class NetClient
 
 
 public:
-	NetClient(const unsigned short& server_port = 3000, const std::string& server_address = "127.0.0.1") {
-		this->server_port = server_port;
-		this->server_address = server_address;
 
-		buffer = new char[BUFFER_SIZE];
-		json_buffer = new json;
+	NetClient(const unsigned short& server_port = 3000, const std::string& server_address = "127.0.0.1");
+	~NetClient();
 
-		listening_mode = false;
-
-
-		if (!(initializeSocketUDP() && initializeSocketTCP()))
-			std::cout << "\nCouldn't initialize network!";
-		else
-			std::cout << "\nSuccesfully connected to the server";
-	};
-
-	~NetClient()
-	{
-		delete[] buffer;
-		delete json_buffer;
-	};
-
-	void setListeningMode(const bool& listen = false) {
-		this->listening_mode = listen;
-	}
-
-
-	bool initializeSocketUDP()
-	{
-		sf::Socket::Status status = udp.bind(sf::Socket::AnyPort);
-		if (status != sf::Socket::Done) {
-			std::cout << "\nFailed to bind UDP port";
-			return false;
-		}
-		else
-			return true;
-	}
-
-	bool initializeSocketTCP() {
-		sf::Socket::Status status = tcp.connect(server_address, server_port);
-		if (status != sf::Socket::Done) {
-			std::cout << "\nFailed to establish TCP connection";
-			return false;
-		}
-		else
-			return true;
-	}
-
-
-	void readDataTCP() {
-		char* temp_buffer = new char[BUFFER_SIZE];
-		std::size_t received_data = 0;
-
-		sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
-		if (status == sf::Socket::Status::Done) {
-			char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-			std::cout << "\nTCP["<<received_data<<"B]: " << temp;
-			
-
-			delete[] temp;
-		}
-	}
-
-	void readDataUDP() {
-		char* temp_buffer = new char[BUFFER_SIZE];
-		std::size_t received_data = 0;
-		sf::IpAddress sender(this->server_address);
-
-		sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
-		if (status == sf::Socket::Status::Done) {
-			char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-			std::cout << "\nUDP[" << received_data << "B]: " << temp;
-
-
-			delete[] temp;
-		}
-	}
-
-	void listenTCP() {
-		do {
-			if (listening_mode)
-				this->readDataTCP();
-		} while (true);
-	}
-
-	void listenUDP() {
-		do {
-			if (listening_mode)
-				this->readDataUDP();
-		} while (true);
-	}
-
-	bool sendDataTCP(const char* data, const unsigned short& data_size) {
-		sf::Socket::Status status = this->tcp.send(data, data_size);
-		if (status != sf::Socket::Status::Done)
-			return false;
-		else
-			return true;
-	}
-
-	bool sendDataUDP(const char* data, const unsigned short& data_size) {
-		sf::Socket::Status status = this->udp.send(data, data_size, this->server_address, this->server_port);
-		if (status != sf::Socket::Status::Done)
-			return false;
-		else
-			return true;
-	}
+	void setListeningMode(const bool& listen = false) { this->listening_mode = listen; }
+	const char& getID() const { return this->my_id; }
+	bool initializeSocketUDP();
+	bool initializeSocketTCP();
+	void readDataTCP();
+	void readDataUDP();
+	void listenTCP();
+	void listenUDP();
+	bool sendDataTCP(const char* data, const unsigned short& data_size);
+	bool sendDataUDP(const char* data, const unsigned short& data_size);
 };

@@ -144,6 +144,7 @@
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="engine_generators.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="net_client.cpp" />
     <ClCompile Include="tank.cpp" />
     <ClCompile Include="tank_barrel.cpp" />
   </ItemGroup>

@@ -35,6 +35,7 @@ class Engine
 
 	short mouse_aim_angle(const Tank_barrel& barrel);
 	void control_tank(Tank& tank);
+
 public:
 	Engine();
 	Engine(sf::RenderWindow& win);
@@ -52,4 +53,5 @@ public:
 	Tank_barrel* generate_Barrel(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 	Bullet_base* generate_Bullet_base(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 	Tank* generate_Tank(const Engine::tank_color& color, const Engine::barrel_size& size) const;
+
 };

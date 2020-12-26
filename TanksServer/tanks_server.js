@@ -35,23 +35,45 @@ class TanksServer{
 		//start listening od UDP and TCP ports
 		this.udp.bind(this.port);
 		this.tcp.listen(this.port);
+
 	
+
 		setInterval( () => {
-			for (let i = 0; i < this.players.length; i++)
-				this.players[i].write(`\nGraczor #${i}`);
+
+
+			// console.log(this.data.players)
+			for(let index in this.data.players)
+			{
+				this.data.players[index].write(`\nGraczor #${index}`);
+				console.log(index)
+			}
+			
+
+			// for (let i = 0; i < this.players_counter; i++)
+			// 	this.players[i].write(`\nGraczor #${i}`);
 		}, 1000);
 
-		this.players = [];
 
-		this.data = [];
+
+		this.players_counter = 0;
+		this.data = {};
+		this.data.players = {};
 	}
 
 	handleConnectionTCP(connection) {
 		console.log(`New player connected: ${connection.remoteAddress}:${connection.remotePort}`)
-		this.players.push(connection);
+		// this.players.push(connection);
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
-		connection.on("end", this.handleDisconnectTCP);
+		connection.on("close", this.handleDisconnectTCP.apply(this, [this.players_counter]));
+		
+		connection.id = this.players_counter;	//saves id data in connection object
+		this.data.players[this.players_counter] = connection;	//saves connection object(player connection)
+		connection.write(this.players_counter.toString());	//sends to player info about his ID
+
+
+		this.players_counter += 1;
+
 
 		// connection.write(JSON.stringify({t: 0, id: this.players.length}));
 	}
@@ -62,16 +84,16 @@ class TanksServer{
 	
 
 	handleDataTCP(data) {
-		console.log(`Received new data: ${data}`);
+		// console.log(`Received new data: ${data}`);
 	}
 
 	handleListeningTCP() {
 		console.log(`TCP started listening at: ${this.tcp.address()}:[${this.port}]`)
 	}
 
-	handleDisconnectTCP(e) {
+	handleDisconnectTCP(e, id) {
+		console.log("#", id, "disconnected", this);
 		console.log("Client disconnected");
-		// this.players.pop();
 	}
 
 	//##############
@@ -84,7 +106,7 @@ class TanksServer{
 
 	handleReceiveUDP(msg, rinfo){
 		this.data.push(JSON.parse(msg))
-		console.log(`New UDP message: ${this.data[this.data.length - 1]}\nFrom: ${rinfo}`);
+		console.log(`New UDP message: ${this.data[this.players_counter - 1]}\nFrom: ${rinfo}`);
 	}
 
 	handleListeningUDP() {

@@ -8,9 +8,18 @@ int main()
 	sf::RenderWindow win(sf::VideoMode(1280, 720), "Tanks");
 	win.setFramerateLimit(60);
 
-	Engine engine(win);
+	Engine *engine = new Engine(win);
 
-	engine.test();
+	engine->test();
+
+
+
+	delete engine;
+
+
+
+
+
 
 
 
