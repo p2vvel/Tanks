@@ -25,6 +25,8 @@ class TanksServer{
 		this.handleDisconnectTCP = this.handleDisconnectTCP.bind(this);
 
 
+		this.prepareDataToSend = this.prepareDataToSend.bind(this);
+
 
 		this.tcp = net.createServer();
 		this.tcp.on("connection", this.handleConnectionTCP);
@@ -40,12 +42,12 @@ class TanksServer{
 
 		setInterval( () => {
 
+			let xd = this.prepareDataToSend();
+			console.log(xd);
 			// console.log(this.data.players)
 			for(let index in this.data.players)
-			{
-				this.data.players[index].write(`\nGraczor #${index}`);
-				console.log(index)
-			}
+				this.data.players[index].write(xd);
+			
 
 		}, 1000);
 
@@ -63,7 +65,7 @@ class TanksServer{
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
 		connection.on("close", (e) => { 
-			console.log("Player disconnected: ",connection.id)
+			console.log("Player disconnected: ", connection.id)
 			delete this.data.players[connection.id];
 		});
 		
@@ -75,16 +77,15 @@ class TanksServer{
 		this.players_counter += 1;
 
 
-		// connection.write(JSON.stringify({t: 0, id: this.players.length}));
 	}
 
 	handleErrorTCP(err) {
 		console.log(`TCP error: ${err}`);
 	}
-	
 
 	handleDataTCP(data) {
-		let temp_data = JSON.stringify(data);
+		let temp_data = JSON.parse(data);
+		// console.log(temp_data)
 		console.log(`Received data from player #${temp_data.id}`);
 		this.data.players_data[temp_data.id] = temp_data;
 	}
@@ -94,7 +95,7 @@ class TanksServer{
 	}
 
 	handleDisconnectTCP(e, id) {
-		console.log("#", id, "disconnected", this);
+		console.log("#", id, "disconnected");
 		console.log("Client disconnected");
 	}
 
@@ -102,17 +103,34 @@ class TanksServer{
 	//UDP functions:
 	//##############
 	handleErrorUDP(err){
-		console.log(`UDP error: ${err}`)
+		console.log(`UDP error: ${err}`);
 		this.udp.close();
 	}
 
 	handleReceiveUDP(msg, rinfo){
-		this.data.push(JSON.parse(msg))
-		console.log(`New UDP message: ${this.data[this.players_counter - 1]}\nFrom: ${rinfo}`);
+		// this.data.push(JSON.parse(msg));
+		// console.log(`New UDP message: ${this.data[this.players_counter - 1]}\nFrom: ${rinfo}`);
+		console.log("New udp data");
 	}
 
 	handleListeningUDP() {
-		console.log(`UDP started listening at: ${this.udp.address().address}:[${this.udp.address().port}]`)
+		console.log(`UDP started listening at: ${this.udp.address().address}:[${this.udp.address().port}]`);
+	}
+
+
+
+
+	prepareDataToSend(){
+		let temp = {}
+		temp.tanks = []
+		
+		for (let index in this.data.players_data){
+			temp.tanks.push(this.data.players_data[index]);
+		}
+
+
+		return JSON.stringify(temp);
+
 	}
 }
 

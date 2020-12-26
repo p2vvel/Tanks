@@ -29,6 +29,24 @@ class NetClient
 
 
 	//returns slice of char array 4
+	//static char* substring(const char* str, const unsigned short& length, const unsigned char& end, const unsigned char& start = 0) {
+	//	if (end > length || end <= start) {
+	//		char* temp = new char[1];
+	//		temp[0] = '\0';
+	//		return temp;
+	//	};
+
+	//	//+1 in size to store terminating NULL character at the end
+	//	char* temp = new char[end - start + 1]();	//with () at the end all elements will be initialized with 0 ('\0')
+	//	//temp[end - start] = '\0';
+
+	//	for (int i = 0; i < (end - start); i++)
+	//		temp[i] = str[start + i];
+
+
+	//	return temp;
+	//}
+
 	static char* substring(const char* str, const unsigned short& length, const unsigned char& end, const unsigned char& start = 0) {
 		if (end > length || end <= start) {
 			char* temp = new char[1];
@@ -40,8 +58,13 @@ class NetClient
 		char* temp = new char[end - start + 1]();	//with () at the end all elements will be initialized with 0 ('\0')
 		//temp[end - start] = '\0';
 
+		std::cout << "\nData: ";
 		for (int i = 0; i < (end - start); i++)
+		{
 			temp[i] = str[start + i];
+			std::cout << temp[i];
+		}
+		std::cout << "\n\n";
 
 
 		return temp;

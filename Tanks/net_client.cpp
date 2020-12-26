@@ -41,11 +41,6 @@ bool NetClient::initializeSocketUDP()
 		return false;
 	}
 	else {
-
-
-
-
-
 		return true;
 	}
 }
@@ -82,8 +77,11 @@ void NetClient::readDataTCP() {
 
 	sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 	if (status == sf::Socket::Status::Done) {
+		
 		char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-		std::cout << "\nTCP[" << received_data << "B]: " << temp;
+		
+		json temp_json = json::parse(temp);
+		std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
 
 
 		delete[] temp;
