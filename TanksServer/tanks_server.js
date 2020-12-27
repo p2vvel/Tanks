@@ -41,15 +41,11 @@ class TanksServer{
 	
 
 		setInterval( () => {
-
-			let xd = this.prepareDataToSend();
-			console.log(xd);
-			// console.log(this.data.players)
 			for(let index in this.data.players)
-				this.data.players[index].write(xd);
+				this.data.players[index].write(this.prepareDataToSend());
 			
 
-		}, 1000);
+		}, 10);
 
 
 
@@ -84,10 +80,17 @@ class TanksServer{
 	}
 
 	handleDataTCP(data) {
-		let temp_data = JSON.parse(data);
+		let temp_data;
+		try{
+			temp_data = JSON.parse(data);
+			console.log(`Received data from player #${temp_data.id}`);
+			this.data.players_data[temp_data.id] = temp_data;
+		}
+		catch(err){
+			console.log(err, data)
+		}
 		// console.log(temp_data)
-		console.log(`Received data from player #${temp_data.id}`);
-		this.data.players_data[temp_data.id] = temp_data;
+		
 	}
 
 	handleListeningTCP() {

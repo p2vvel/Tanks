@@ -1,10 +1,10 @@
 #include "net_client.h"
 
+#include<stdexcept>
 
 
 
-
-NetClient::NetClient(const unsigned short& server_port , const std::string& server_address) {
+NetClient::NetClient(const unsigned short& server_port, const std::string& server_address) {
 	this->server_port = server_port;
 	this->server_address = server_address;
 
@@ -76,14 +76,20 @@ void NetClient::readDataTCP() {
 
 	sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 	if (status == sf::Socket::Status::Done) {
-		
-		json temp_json = json::parse(temp_buffer);
-		std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
+
+		try {
+
+			json temp_json = json::parse(temp_buffer);
+			//std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
+		}
+		catch (std::exception &e) {
+			std::cout << "Parse error, rejecting packet:\n" << temp_buffer<<std::endl;
+		}
 
 
 	}
 
-	delete [] temp_buffer;
+	delete[] temp_buffer;
 }
 
 void NetClient::readDataUDP() {
@@ -93,9 +99,13 @@ void NetClient::readDataUDP() {
 
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
-		json temp_json = json::parse(temp_buffer);
-		std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
-
+		try {
+			json temp_json = json::parse(temp_buffer);
+			//std::cout << "\nUDP[" << received_data << "B]: " << temp_json.dump();
+		}
+		catch (std::exception& e) {
+			std::cout << "Parse error, rejecting packet:\n" << temp_buffer << std::endl;
+		}
 
 
 	}
