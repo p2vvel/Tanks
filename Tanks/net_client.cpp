@@ -54,13 +54,12 @@ bool NetClient::initializeSocketTCP() {
 	else {
 
 
-		char* temp_buffer = new char[BUFFER_SIZE];
+		char* temp_buffer = new char[BUFFER_SIZE]();
 		std::size_t received_data = 0;
 
 		sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 		if (status == sf::Socket::Status::Done) {
-			char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-			my_id = atoi(temp);
+			my_id = atoi(temp_buffer);
 			std::cout << "My id: " << this->my_id;
 		}
 
@@ -72,20 +71,19 @@ bool NetClient::initializeSocketTCP() {
 
 
 void NetClient::readDataTCP() {
-	char* temp_buffer = new char[BUFFER_SIZE];
+	char* temp_buffer = new char[BUFFER_SIZE]();
 	std::size_t received_data = 0;
 
 	sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 	if (status == sf::Socket::Status::Done) {
 		
-		char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-		
-		json temp_json = json::parse(temp);
+		json temp_json = json::parse(temp_buffer);
 		std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
 
 
-		delete[] temp;
 	}
+
+	delete [] temp_buffer;
 }
 
 void NetClient::readDataUDP() {
@@ -95,12 +93,13 @@ void NetClient::readDataUDP() {
 
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
-		char* temp = substring(temp_buffer, BUFFER_SIZE, received_data);
-		std::cout << "\nUDP[" << received_data << "B]: " << temp;
+		json temp_json = json::parse(temp_buffer);
+		std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
 
 
-		delete[] temp;
+
 	}
+	delete[] temp_buffer;
 }
 
 void NetClient::listenTCP() {
