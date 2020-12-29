@@ -5,7 +5,7 @@
 
 int main()
 {
-	sf::RenderWindow win(sf::VideoMode(1280, 720), "Tanks");
+	sf::RenderWindow win(sf::VideoMode(640, 360), "Tanks");
 	win.setFramerateLimit(60);
 
 	Engine *engine = new Engine(win);
