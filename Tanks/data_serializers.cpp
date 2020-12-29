@@ -42,7 +42,9 @@ void to_json(nlohmann::json& j, const Tank& tank) {
 void from_json(const nlohmann::json& j, Tank& tank) {
 	tank.tank_id = j["id"];
 	tank.speed = j["speed"];
-	tank.angle = j["angle"];
-	tank.position = sf::Vector2f(j["pos"]["x"], j["pos"]["y"]);
+	//tank.angle = j["angle"];
+	tank.set_position(sf::Vector2f(j["pos"]["x"], j["pos"]["y"]));
+	tank.set_angle(j["angle"]);
+	//tank.position = sf::Vector2f(j["pos"]["x"], j["pos"]["y"]);
 	from_json(j["barrel"], *(tank.barrel));
 };

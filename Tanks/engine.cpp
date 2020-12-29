@@ -99,10 +99,10 @@ void Engine::test()
 		//ONLINE UPDATES
 		{
 			json jtemp = net_client->json_buffer;
-			std::cout << "odbieram: \n" << jtemp.dump(3)<<std::endl;
+			//std::cout << "odbieram: \n" << jtemp.dump(3)<<std::endl;
 			bool mine_updated = false;
 
-			if (!jtemp["tanks"].is_null())
+			if (!jtemp["tanks"].empty())
 			{
 				for (int i = 0; i < jtemp["players"]; i++)
 				{
@@ -168,8 +168,11 @@ void Engine::test()
 		tank->draw(*window);
 
 
-		/*for (int i = 0; i < this->net_client->json_buffer["players"] - 1; i++)
-			enemies[i]->draw(*window);*/
+		for (int i = 0; i < this->net_client->json_buffer["players"] - 1; i++)
+		{
+			enemies[i]->update();
+			enemies[i]->draw(*window);
+		}
 
 		window->display();
 
@@ -179,7 +182,7 @@ void Engine::test()
 		nlohmann::json j = *tank;
 		j["id"] = net_client->getID();
 
-		std::cout << "wysylam: \n" << j.dump(3)<<std::endl;
+		//std::cout << "wysylam: \n" << j.dump(3)<<std::endl;
 
 		net_client->setListeningMode(false);
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());

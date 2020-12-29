@@ -41,7 +41,7 @@ class TanksServer{
 	
 
 		setInterval( () => {
-			// console.log( this.prepareDataToSend());
+			//  console.log( this.prepareDataToSend());
 
 			for(let index in this.data.players)
 				this.data.players[index].write(this.prepareDataToSend());
@@ -79,8 +79,8 @@ class TanksServer{
 
 
 		this.players_counter += 1;
-		this.active_players += 1;
-		console.log(`Active players: ${this.active_players}`)
+		// this.active_players += 1;
+		// console.log(`Active players: ${this.active_players}`)
 
 	}
 
@@ -91,8 +91,17 @@ class TanksServer{
 	handleDataTCP(data) {
 		let temp_data;
 		try{
+			
 			temp_data = JSON.parse(data);
 			// console.log(`Received data from player #${temp_data.id}`);
+			
+			if(!(temp_data.id in this.data.players_data))
+				{
+				this.active_players += 1;	//increments active players after receiving first packet from new player
+				console.log(`Active players: ${this.active_players}`)
+
+
+				}
 			this.data.players_data[temp_data.id] = temp_data;
 		}
 		catch(err){
