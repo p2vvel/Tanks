@@ -23,6 +23,8 @@ Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* ma
 	handling = 0.6;
 
 	skidmarks = marks;
+	
+	tank_id = -1;
 }
 
 

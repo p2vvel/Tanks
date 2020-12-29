@@ -28,6 +28,7 @@ void from_json(const json& j, Tank_barrel& barrel) {
 
 void to_json(nlohmann::json& j, const Tank& tank) {
 	j = {
+		{"id", tank.tank_id},
 		{"speed", tank.speed},
 		{"angle", tank.angle},
 		{"pos", {
@@ -39,6 +40,7 @@ void to_json(nlohmann::json& j, const Tank& tank) {
 };
 
 void from_json(const nlohmann::json& j, Tank& tank) {
+	tank.tank_id = j["id"];
 	tank.speed = j["speed"];
 	tank.angle = j["angle"];
 	tank.position = sf::Vector2f(j["pos"]["x"], j["pos"]["y"]);

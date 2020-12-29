@@ -2,6 +2,7 @@
 
 #include<stdexcept>
 
+#include "engine.h"
 
 
 NetClient::NetClient(const unsigned short& server_port, const std::string& server_address) {
@@ -9,26 +10,28 @@ NetClient::NetClient(const unsigned short& server_port, const std::string& serve
 	this->server_address = server_address;
 
 	buffer = new char[BUFFER_SIZE];
-	json_buffer = new json;
 
 	listening_mode = false;
 
 
-	if (!(initializeSocketUDP() && initializeSocketTCP()))
+	if (!(initializeSocketUDP() && initializeSocketTCP())) {
+		connected_to_server = false;
 		std::cout << "\nCouldn't initialize network!";
-	else
+	}
+	else {
+		connected_to_server = true;
 		std::cout << "\nSuccesfully connected to the server";
+	}
 };
 
 NetClient::~NetClient()
 {
 	delete[] buffer;
-	delete json_buffer;
 
 
-	std::cout << "Rozlonczansko xdd";
+	std::cout << "\nRozlonczansko xdd";
 	this->tcp.disconnect();
-	std::cout << "Rozlonczylem :---D";
+	std::cout << "\nRozlonczylem :---D";
 };
 
 
@@ -79,7 +82,9 @@ void NetClient::readDataTCP() {
 
 		try {
 
-			json temp_json = json::parse(temp_buffer);
+			//json temp_json = json::parse(temp_buffer);
+			this->json_buffer = json::parse(temp_buffer);
+
 			//std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
 		}
 		catch (std::exception &e) {
@@ -100,7 +105,9 @@ void NetClient::readDataUDP() {
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
 		try {
-			json temp_json = json::parse(temp_buffer);
+			//json temp_json = json::parse(temp_buffer);
+			this->json_buffer = json::parse(temp_buffer);
+
 			//std::cout << "\nUDP[" << received_data << "B]: " << temp_json.dump();
 		}
 		catch (std::exception& e) {

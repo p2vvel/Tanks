@@ -22,7 +22,7 @@ class TanksServer{
 		this.handleDataTCP = this.handleDataTCP.bind(this);
 		this.handleErrorTCP = this.handleErrorTCP.bind(this);
 		this.handleListeningTCP = this.handleListeningTCP.bind(this);
-		this.handleDisconnectTCP = this.handleDisconnectTCP.bind(this);
+		// this.handleDisconnectTCP = this.handleDisconnectTCP.bind(this);
 
 
 		this.prepareDataToSend = this.prepareDataToSend.bind(this);
@@ -41,14 +41,15 @@ class TanksServer{
 	
 
 		setInterval( () => {
+			// console.log( this.prepareDataToSend());
+
 			for(let index in this.data.players)
 				this.data.players[index].write(this.prepareDataToSend());
-			
-
-		}, 10);
+		}, 5);
 
 
 
+		this.active_players = 0;
 		this.players_counter = 0;
 		this.data = {};
 		this.data.players = {};	//players connection
@@ -56,13 +57,17 @@ class TanksServer{
 	}
 
 	handleConnectionTCP(connection) {
-		console.log(`New player connected: ${connection.remoteAddress}:${connection.remotePort}`)
 		// this.players.push(connection);
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
 		connection.on("close", (e) => { 
-			console.log("Player disconnected: ", connection.id)
 			delete this.data.players[connection.id];
+			delete this.data.players_data[connection.id];
+			this.active_players -= 1;
+			console.log(`${connection.id}# player disconnected`)
+			console.log(`Active players: ${this.active_players}`)
+
+
 		});
 		
 		connection.id = this.players_counter;	//saves id data in connection object
@@ -70,8 +75,12 @@ class TanksServer{
 		connection.write(this.players_counter.toString());	//sends to player info about his ID
 
 
-		this.players_counter += 1;
+		console.log(`New player connected[id: ${connection.id}]: ${connection.remoteAddress}:${connection.remotePort}`)
 
+
+		this.players_counter += 1;
+		this.active_players += 1;
+		console.log(`Active players: ${this.active_players}`)
 
 	}
 
@@ -83,7 +92,7 @@ class TanksServer{
 		let temp_data;
 		try{
 			temp_data = JSON.parse(data);
-			console.log(`Received data from player #${temp_data.id}`);
+			// console.log(`Received data from player #${temp_data.id}`);
 			this.data.players_data[temp_data.id] = temp_data;
 		}
 		catch(err){
@@ -97,11 +106,7 @@ class TanksServer{
 		console.log(`TCP started listening at: ${this.tcp.address()}:[${this.port}]`)
 	}
 
-	handleDisconnectTCP(e, id) {
-		console.log("#", id, "disconnected");
-		console.log("Client disconnected");
-	}
-
+	
 	//##############
 	//UDP functions:
 	//##############
@@ -130,6 +135,8 @@ class TanksServer{
 		for (let index in this.data.players_data){
 			temp.tanks.push(this.data.players_data[index]);
 		}
+		
+		temp.players = this.active_players;
 
 
 		return JSON.stringify(temp);

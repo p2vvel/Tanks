@@ -42,10 +42,14 @@ class Tank
 
 	Skidmarks* skidmarks;	//slad po gasienicach - sa opcjonalne
 
+	short tank_id;
+
 public:
 	Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
 	~Tank();
 
+
+	void set_ID(const short& ID) { this->tank_id = ID;  }
 	void set_position(const sf::Vector2f& new_pos);
 
 	void change_speed(const float& new_speed);

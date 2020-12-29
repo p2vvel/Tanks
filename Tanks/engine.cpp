@@ -37,15 +37,28 @@ const sf::Vector2f& Engine::calculate_vector(const float& distance_, const short
 
 void Engine::test()
 {
+	if (!net_client->succesfullConnection())
+		return;
+
 
 	sf::IntRect a = GET_SPRITE_HQ(tracksSmall);
 	a.height = 6;
 
 
 
+
+
 	Tank* tank = generate_Tank(tank_color::green, barrel_size::big);
 
 	tank->set_position(sf::Vector2f(100, 100));
+	tank->set_ID(net_client->my_id);
+
+
+
+	std::vector<Tank*> enemies;
+	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
+	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
+	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
 
 
 
@@ -58,6 +71,56 @@ void Engine::test()
 	sf::Event ev;
 	while (window->isOpen())
 	{
+
+		//DEBUG
+		{
+			json jtemp = net_client->json_buffer;
+			if (net_client->json_buffer["players"].is_null()) {
+				std::cout << std::endl << jtemp.dump(3);
+			}
+			else {
+				bool temp = false;
+				for (int i = 0; i < jtemp["players"]; i++)
+					if (jtemp["tanks"][i]["id"].is_null())
+						temp = true;
+					else
+						//std::cout << "\nPlayer: " << jtemp["tanks"][i]["id"];
+						;
+
+				if (temp)
+					std::cout << std::endl <<jtemp.dump(3);
+
+			}
+		}
+		//ENDDEBUG
+
+
+
+		//ONLINE UPDATES
+		{
+			json jtemp = net_client->json_buffer;
+			bool mine_updated = false;
+	
+			//if(!jtemp["tanks"].is_null())
+			for (int i = 0; i < jtemp["players"]; i++)
+			{
+				if (jtemp["tanks"][i]["id"] == this->net_client->my_id){
+					from_json(jtemp["tanks"][i], *tank);
+					mine_updated = true;
+				}
+				else
+				{
+					if(mine_updated)
+						from_json(jtemp["tanks"][i], *enemies[i - 1]);
+					else
+						from_json(jtemp["tanks"][i], *enemies[i]);
+
+
+				}
+			}
+
+		}
+
 		net_client->setListeningMode(true);
 
 
@@ -100,6 +163,12 @@ void Engine::test()
 		}
 		tank->draw(*window);
 
+		
+		/*for (int i = 0; i < this->net_client->json_buffer["players"] - 1; i++)
+			enemies[i]->draw(*window);*/
+
+		window->display();
+
 
 
 
@@ -107,9 +176,15 @@ void Engine::test()
 		j["id"] = net_client->getID();
 
 
-		window->display();
 		net_client->setListeningMode(false);
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
+
+		//std::cout << std::endl<< net_client->json_buffer.dump(3);
+	}
+
+
+	for (int i = 0; i < enemies.size(); i++) {
+		delete enemies[i];
 	}
 
 	net_thread_tcp.join();
