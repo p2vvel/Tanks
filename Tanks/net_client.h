@@ -23,7 +23,9 @@ class NetClient
 	std::string server_address;
 
 	char* buffer;
-	json json_buffer;
+	json *json_buffer;
+	json* json_buffer_temp;
+	bool read_data_recently;
 
 	bool listening_mode;	//indicates if sockets should try to read incoming data
 	unsigned short my_id;
@@ -37,7 +39,21 @@ public:
 
 	const bool& succesfullConnection() const { return this->connected_to_server;  }
 
-	void setListeningMode(const bool& listen = false) { this->listening_mode = listen; }
+	void setListeningMode(const bool& listen = false) { 
+		if (listen == true) {
+			read_data_recently = false;
+		}
+		else {
+			if (read_data_recently) {
+				json* temp = this->json_buffer;
+				this->json_buffer = this->json_buffer_temp;
+				this->json_buffer_temp = temp;
+			}
+		}
+		
+		this->listening_mode = listen; 
+	}
+
 	const char& getID() const { return this->my_id; }
 	bool initializeSocketUDP();
 	bool initializeSocketTCP();

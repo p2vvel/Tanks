@@ -1,7 +1,7 @@
 #include "engine.h"
 #include<iostream>
 
-
+#include<nlohmann/json.hpp>
 
 Engine::Engine()
 {
@@ -44,25 +44,20 @@ void Engine::test()
 	sf::IntRect a = GET_SPRITE_HQ(tracksSmall);
 	a.height = 6;
 
-
-
-
-
 	Tank* tank = generate_Tank(tank_color::green, barrel_size::big);
 
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
-
-
 
 	std::vector<Tank*> enemies;
 	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
 	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
 	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
 
-
-
 	std::vector<Bullet*> bullets;
+
+
+
 
 
 	std::thread net_thread_tcp(&NetClient::listenTCP, net_client);
@@ -72,80 +67,60 @@ void Engine::test()
 	while (window->isOpen())
 	{
 
-		////DEBUG
-		//{
-		//	json jtemp = net_client->json_buffer;
-		//	if (net_client->json_buffer["players"].is_null()) {
-		//		std::cout << std::endl << jtemp.dump(3);
-		//	}
-		//	else {
-		//		bool temp = false;
-		//		for (int i = 0; i < jtemp["players"]; i++)
-		//			if (jtemp["tanks"][i]["id"].is_null())
-		//				temp = true;
-		//			else
-		//				//std::cout << "\nPlayer: " << jtemp["tanks"][i]["id"];
-		//				;
+		nlohmann::json* game_data = (net_client->json_buffer);
 
-		//		if (temp)
-		//			std::cout << std::endl << jtemp.dump(3);
-
-		//	}
+		//unsigned char players;
+		//try {
+		//	if (jtemp.contains("players"))
+		//		players = jtemp["players"];
+		//	else
+		//		players = 0;
 		//}
-		////ENDDEBUG
-
-		json jtemp = (net_client->json_buffer);
-
-		unsigned char players;
-		try {
-			if (jtemp.contains("players"))
-				players = jtemp["players"];
-			else
-				players = 0;
-		}
-		catch (std::exception& e) {
-			std::cout << net_client->json_buffer.dump(3);
-			std::cout << jtemp.dump(3);
-
-			
-		}
-		
+		//catch (std::exception& e) {
+		//	std::cout << net_client->json_buffer.dump(3);
+		//	std::cout << jtemp.dump(3);
 
 
-		//ONLINE UPDATES
-		{
-
-			//std::cout << "odbieram: \n" << jtemp.dump(3)<<std::endl;
-			bool mine_updated = false;
-
-			if (!jtemp["tanks"].empty())
-			{
-				for (int i = 0; i < players; i++)
-				{
-					if (jtemp["tanks"][i]["id"] == this->net_client->my_id) {
-						//from_json(jtemp["tanks"][i], *tank);
-						mine_updated = true;
-					}
-					else
-					{
-						std::cout << jtemp["tanks"].dump(3);
-						if (mine_updated)
-							from_json(jtemp["tanks"][i], *enemies[i - 1]);
-						else
-							from_json(jtemp["tanks"][i], *enemies[i]);
+		//}
 
 
-					}
-				}
-			}
 
-		}
+		//{
+		//	bool mine_updated = false;
+
+		//	if (!jtemp["tanks"].empty())
+		//	{
+		//		for (int i = 0; i < players; i++)
+		//		{
+		//			if (jtemp["tanks"][i]["id"] == this->net_client->my_id) {
+		//				//from_json(jtemp["tanks"][i], *tank);
+		//				mine_updated = true;
+		//			}
+		//			else
+		//			{
+		//				std::cout << jtemp["tanks"].dump(3);
+		//				if (mine_updated)
+		//					from_json(jtemp["tanks"][i], *enemies[i - 1]);
+		//				else
+		//					from_json(jtemp["tanks"][i], *enemies[i]);
+
+
+		//			}
+		//		}
+		//	}
+
+		//}
+
+		//std::cout << std::endl << game_data->dump(3) << std::endl;
+
+
+
+
+
 
 
 
 		net_client->setListeningMode(true);
-
-
 
 
 		while (window->pollEvent(ev))
@@ -153,6 +128,8 @@ void Engine::test()
 			if (ev.type == sf::Event::Closed || (ev.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
 			{
 				window->close();
+				for (int i = 0; i < enemies.size(); i++)
+					delete enemies[i];
 				net_client->setListeningMode(false);
 				net_thread_tcp.detach();
 				net_thread_udp.detach();
@@ -164,6 +141,23 @@ void Engine::test()
 
 
 
+		bool mine_updated = false;
+		for (int i = 0; i < (*game_data)["tanks"].size(); i++)
+		{
+			if ((*game_data)["tanks"][i]["id"] == net_client->my_id) {
+				from_json((*game_data)["tanks"][i], *tank);
+				mine_updated = true;
+			}
+			else {
+				from_json((*game_data)["tanks"][i], *enemies[(mine_updated ? i - 1 : i)]);
+				enemies[(mine_updated ? i - 1 : i)]->update();
+			}
+
+		}
+
+
+
+
 
 
 		control_tank(*tank);
@@ -171,6 +165,11 @@ void Engine::test()
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			if (tank->barrel->shot())
 				bullets.push_back(tank->barrel->generate_bullet());
+
+
+
+
+
 
 
 		tank->update();
@@ -185,33 +184,27 @@ void Engine::test()
 		}
 		tank->draw(*window);
 
-
-		for (int i = 0; i < players - 1; i++)
-		{
-			enemies[i]->update();
-			enemies[i]->draw(*window);
+		for (auto t : enemies) {
+			if(t->tank_id != -1)
+				t->draw(*window);
 		}
+
 
 		window->display();
 
 
 
 
-		nlohmann::json j = *tank;
-		j["id"] = net_client->getID();
+			nlohmann::json j = *tank;
+			j["id"] = net_client->getID();
 
-		//std::cout << "wysylam: \n" << j.dump(3)<<std::endl;
 
 		net_client->setListeningMode(false);
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
-
-		//std::cout << std::endl<< net_client->json_buffer.dump(3);
 	}
 
 
-	for (int i = 0; i < enemies.size(); i++) {
-		delete enemies[i];
-	}
+
 
 	net_thread_tcp.join();
 	net_thread_udp.join();

@@ -14,6 +14,12 @@ NetClient::NetClient(const unsigned short& server_port, const std::string& serve
 	listening_mode = false;
 
 
+	json_buffer = new json;
+	json_buffer_temp = new json;
+	read_data_recently = false;
+
+
+
 	if (!(initializeSocketUDP() && initializeSocketTCP())) {
 		connected_to_server = false;
 		std::cout << "\nCouldn't initialize network!";
@@ -26,6 +32,8 @@ NetClient::NetClient(const unsigned short& server_port, const std::string& serve
 
 NetClient::~NetClient()
 {
+	delete json_buffer;
+	delete json_buffer_temp;
 	delete[] buffer;
 
 
@@ -55,19 +63,16 @@ bool NetClient::initializeSocketTCP() {
 		return false;
 	}
 	else {
-
-
 		char* temp_buffer = new char[BUFFER_SIZE]();
 		std::size_t received_data = 0;
 
 		sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 		if (status == sf::Socket::Status::Done) {
 			my_id = atoi(temp_buffer);
-			std::cout << "My id: " << this->my_id;
+			std::cout << "My id: " << this->my_id << std::endl;
 		}
 
-
-
+		delete[] temp_buffer;
 		return true;
 	}
 }
@@ -79,24 +84,13 @@ void NetClient::readDataTCP() {
 
 	sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 	if (status == sf::Socket::Status::Done) {
-
 		try {
-
-			json temp_json = json::parse(temp_buffer);
-
-			
-			this->json_buffer = temp_json;
-			if (this->json_buffer["players"].is_null())
-				std::cout << "\n\n##" << temp_buffer << "\n\n##";
-
-
-			//std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
+			*(this->json_buffer_temp) = json::parse(temp_buffer);
+			read_data_recently = true;
 		}
-		catch (std::exception &e) {
-			std::cout << "Parse error, rejecting packet:\n" << temp_buffer<<std::endl;
+		catch (std::exception& e) {
+			std::cout << "Parse error, rejecting packet:\n" << temp_buffer << std::endl;
 		}
-
-
 	}
 
 	delete[] temp_buffer;
@@ -105,22 +99,19 @@ void NetClient::readDataTCP() {
 void NetClient::readDataUDP() {
 	char* temp_buffer = new char[BUFFER_SIZE];
 	std::size_t received_data = 0;
-	sf::IpAddress sender(this->server_address);
 
+	sf::IpAddress sender(this->server_address);
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
 		try {
-			json temp_json = json::parse(temp_buffer);
-			this->json_buffer = temp_json;
-
-			//std::cout << "\nUDP[" << received_data << "B]: " << temp_json.dump();
+			*(this->json_buffer_temp) = json::parse(temp_buffer);
+			read_data_recently = true;
 		}
 		catch (std::exception& e) {
 			std::cout << "Parse error, rejecting packet:\n" << temp_buffer << std::endl;
 		}
-
-
 	}
+
 	delete[] temp_buffer;
 }
 
