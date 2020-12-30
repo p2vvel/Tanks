@@ -94,7 +94,7 @@ void Engine::test()
 		//}
 		////ENDDEBUG
 
-		json jtemp = (net_client->json_buffer);
+		json jtemp = net_client->json_buffer;
 
 		unsigned char players;
 		try {

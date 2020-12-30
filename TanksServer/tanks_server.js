@@ -142,7 +142,11 @@ class TanksServer{
 		temp.tanks = []
 		
 		for (let index in this.data.players_data){
-			temp.tanks.push(this.data.players_data[index]);
+			let temp_player = this.data.players_data[index];
+
+			temp.tanks.push(temp_player);
+			
+			
 		}
 		
 		temp.players = this.active_players;

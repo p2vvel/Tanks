@@ -82,8 +82,13 @@ void NetClient::readDataTCP() {
 
 		try {
 
-			//json temp_json = json::parse(temp_buffer);
-			this->json_buffer = json::parse(temp_buffer);
+			json temp_json = json::parse(temp_buffer);
+
+			
+			this->json_buffer = temp_json;
+			if (this->json_buffer["players"].is_null())
+				std::cout << "\n\n##" << temp_buffer << "\n\n##";
+
 
 			//std::cout << "\nTCP[" << received_data << "B]: " << temp_json.dump();
 		}
@@ -105,8 +110,8 @@ void NetClient::readDataUDP() {
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
 		try {
-			//json temp_json = json::parse(temp_buffer);
-			this->json_buffer = json::parse(temp_buffer);
+			json temp_json = json::parse(temp_buffer);
+			this->json_buffer = temp_json;
 
 			//std::cout << "\nUDP[" << received_data << "B]: " << temp_json.dump();
 		}
