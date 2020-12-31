@@ -40,12 +40,12 @@ class TanksServer{
 
 	
 
-		setInterval( () => {
+		/* setInterval( () => {
 			//  console.log( this.prepareDataToSend());
 
 			for(let index in this.data.players)
 				this.data.players[index].write(this.prepareDataToSend());
-		}, 5);
+		}, 5); */
 
 
 
@@ -103,6 +103,9 @@ class TanksServer{
 
 				}
 			this.data.players_data[temp_data.id] = temp_data;
+
+
+			this.data.players[temp_data.id].write(this.prepareDataToSend());
 		}
 		catch(err){
 			console.log(err, data)
