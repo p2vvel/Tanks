@@ -49,10 +49,10 @@ void Engine::test()
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
 
-	std::vector<Tank*> enemies;
+	std::vector<Tank*> enemies;/*
 	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
 	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
-	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
+	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));*/
 
 	std::vector<Bullet*> bullets;
 
@@ -105,14 +105,37 @@ void Engine::test()
 		net_client->readDataTCP();
 
 		//update data
-		nlohmann::json* game_data = (net_client->json_buffer_temp);
+		nlohmann::json* game_data = (net_client->json_buffer);
+		nlohmann::json* game_data_old = (net_client->json_buffer_old);
 
-		std::cout << std::endl << (*game_data).dump(3);
+
+
+		//Reaction for new player joining or enemy disconnect
+		if ((*game_data)["players"] - 1 != enemies.size()) {
+			if ((*game_data)["players"] - 1 < enemies.size()) {
+				//Delete player
+				std::cout << "\nPlayer joined";// << std::endl << game_data->dump(3);
+				do {
+					delete enemies[enemies.size() - 1];	//delete object
+					enemies.pop_back();	//pop pointer
+				} while ((*game_data)["players"] - 1 != enemies.size());
+			}
+			else {
+				//Add new player
+				std::cout << "\nPlayer left";// << std::endl << game_data->dump(3);
+
+				do
+				{
+					enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
+				} while ((*game_data)["players"] - 1 != enemies.size());
+			}
+		}
+
 
 
 
 		bool mine_updated = false;
-		for (int i = 0; i < (*game_data)["tanks"].size(); i++)
+		for (int i = 0; i < (*game_data)["players"]; i++)
 		{
 			if ((*game_data)["tanks"][i]["id"] == net_client->my_id) {
 				from_json((*game_data)["tanks"][i], *tank);
@@ -142,12 +165,20 @@ void Engine::test()
 			a->update();
 			a->draw(*window);
 		}
+
+
+
+		for (auto t : enemies)
+			t->draw_skidmarks(*window);
+		tank->draw_skidmarks(*window);
+
+		for (auto t : enemies)
+			t->draw(*window);
+
+
 		tank->draw(*window);
 
-		for (auto t : enemies) {
-			if (t->tank_id != -1)
-				t->draw(*window);
-		}
+
 
 
 		window->display();

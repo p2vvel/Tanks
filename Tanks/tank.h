@@ -58,8 +58,9 @@ public:
 	void add_angle(const short& new_angle);
 
 	void update();
-	void draw(sf::RenderWindow& win);
+	void draw(sf::RenderWindow& win, const bool &draw_skidmarks = false);
 
+	void draw_skidmarks(sf::RenderWindow& win);
 
 	void accelerate();
 	void decelerate();

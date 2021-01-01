@@ -23,8 +23,8 @@ class NetClient
 	std::string server_address;
 
 	char* buffer;
-	json *json_buffer;
-	json* json_buffer_temp;
+	json *json_buffer_old;
+	json* json_buffer;
 	bool read_data_recently;
 
 	bool listening_mode;	//indicates if sockets should try to read incoming data
@@ -45,9 +45,9 @@ public:
 		}
 		else {
 			if (read_data_recently) {
-				json* temp = this->json_buffer;
-				this->json_buffer = this->json_buffer_temp;
-				this->json_buffer_temp = temp;
+				json* temp = this->json_buffer_old;
+				this->json_buffer_old = this->json_buffer;
+				this->json_buffer = temp;
 			}
 		}
 		

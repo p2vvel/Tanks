@@ -95,15 +95,23 @@ void Tank::update()
 }
 
 
-void Tank::draw(sf::RenderWindow& win)
+void Tank::draw_skidmarks(sf::RenderWindow& win)
 {
 	if (skidmarks != nullptr)
 		skidmarks->draw(win);
+}
+
+
+void Tank::draw(sf::RenderWindow& win, const bool& draw_skidmarks)
+{
+	if (draw_skidmarks)
+		this->draw_skidmarks(win);
 
 
 	win.draw(*tank_body);
 	barrel->draw(win);
 }
+
 
 
 

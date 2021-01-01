@@ -14,8 +14,8 @@ NetClient::NetClient(const unsigned short& server_port, const std::string& serve
 	listening_mode = false;
 
 
+	json_buffer_old = new json;
 	json_buffer = new json;
-	json_buffer_temp = new json;
 	read_data_recently = false;
 
 
@@ -32,8 +32,8 @@ NetClient::NetClient(const unsigned short& server_port, const std::string& serve
 
 NetClient::~NetClient()
 {
+	delete json_buffer_old;
 	delete json_buffer;
-	delete json_buffer_temp;
 	delete[] buffer;
 
 
@@ -85,8 +85,14 @@ void NetClient::readDataTCP() {
 	sf::Socket::Status status = tcp.receive(temp_buffer, BUFFER_SIZE, received_data);
 	if (status == sf::Socket::Status::Done) {
 		try {
-			*(this->json_buffer_temp) = json::parse(temp_buffer);
+			//Swaps pointers to then overwrite json_buffer with new data
+			json* temp = this->json_buffer;
+			this->json_buffer = this->json_buffer_old;
+			this->json_buffer_old = temp;
+
+			*(this->json_buffer) = json::parse(temp_buffer);
 			read_data_recently = true;
+			
 			//std::cout << "\nNew data";
 			//std::cout << std::endl << this->json_buffer_temp->dump(3);
 		}
@@ -106,7 +112,12 @@ void NetClient::readDataUDP() {
 	sf::Socket::Status status = udp.receive(temp_buffer, BUFFER_SIZE, received_data, sender, this->server_port);
 	if (status == sf::Socket::Status::Done) {
 		try {
-			*(this->json_buffer_temp) = json::parse(temp_buffer);
+			//Swaps pointers to then overwrite json_buffer with new data
+			json* temp = this->json_buffer;
+			this->json_buffer = this->json_buffer_old;
+			this->json_buffer_old = temp;
+
+			*(this->json_buffer) = json::parse(temp_buffer);
 			read_data_recently = true;
 		}
 		catch (std::exception& e) {

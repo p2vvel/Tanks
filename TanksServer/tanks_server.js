@@ -61,13 +61,11 @@ class TanksServer{
 		connection.on("data", this.handleDataTCP);
 		connection.on("error", this.handleErrorTCP);
 		connection.on("close", (e) => { 
-			delete this.data.players[connection.id];
-			delete this.data.players_data[connection.id];
 			this.active_players -= 1;
 			console.log(`${connection.id}# player disconnected`)
 			console.log(`Active players: ${this.active_players}`)
-
-
+			delete this.data.players[connection.id];
+			delete this.data.players_data[connection.id];
 		});
 		
 		connection.id = this.players_counter;	//saves id data in connection object
@@ -99,8 +97,6 @@ class TanksServer{
 				{
 				this.active_players += 1;	//increments active players after receiving first packet from new player
 				console.log(`Active players: ${this.active_players}`)
-
-
 				}
 			this.data.players_data[temp_data.id] = temp_data;
 
