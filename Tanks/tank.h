@@ -9,8 +9,12 @@
 
 #include "skidmarks.h"
 
+#include "names.h"
+
+
 class Engine;
 class Tank_barrel;
+
 
 #define MAX_SPEED (handling * 10.0)
 #define MAX_REVERSE_SPEED (handling * 7.0)
@@ -44,8 +48,10 @@ class Tank
 
 	short tank_id;
 
+	Names::tank_color my_color;
+
 public:
-	Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
+	Tank(const sf::Sprite& tank_sprite, const Names::tank_color &color, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
 	~Tank();
 
 

@@ -11,7 +11,7 @@
 
 
 
-Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* marks)
+Tank::Tank(const sf::Sprite& tank_sprite, const Names::tank_color& color, Tank_barrel* new_barrel, Skidmarks* marks)
 {
 	tank_body = new sf::Sprite(tank_sprite);
 	tank_body->setOrigin(tank_body->getGlobalBounds().width / 2, tank_body->getGlobalBounds().height / 2);
@@ -19,6 +19,8 @@ Tank::Tank(const sf::Sprite& tank_sprite, Tank_barrel* new_barrel, Skidmarks* ma
 	barrel = new_barrel;
 	angle = 0;
 	speed = 0;
+
+	my_color = color;
 
 	handling = 0.6;
 

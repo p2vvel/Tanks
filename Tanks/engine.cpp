@@ -7,7 +7,7 @@ Engine::Engine()
 {
 	//pass
 	//my_id = ' ';
-};
+}
 
 
 Engine::Engine(sf::RenderWindow& win)
@@ -44,7 +44,7 @@ void Engine::test()
 	sf::IntRect a = GET_SPRITE_HQ(tracksSmall);
 	a.height = 6;
 
-	Tank* tank = generate_Tank(tank_color::green, barrel_size::big);
+	Tank* tank = generate_random_Tank();//generate_Tank(tank_color::green, barrel_size::big);
 
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
@@ -126,7 +126,7 @@ void Engine::test()
 
 				do
 				{
-					enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
+					enemies.push_back(generate_Tank(Names::tank_color::green, Names::barrel_size::big));
 				} while ((*game_data)["players"] - 1 != enemies.size());
 			}
 		}

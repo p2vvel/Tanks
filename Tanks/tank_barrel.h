@@ -8,11 +8,16 @@
 
 #include "data_serializers.h"
 
+#include "names.h"
+
 
 class Bullet_base;
 class Bullet;
 class Tank;
 class Muzzle_flash;
+
+class Engine;
+
 
 class Tank_barrel
 {
@@ -32,8 +37,10 @@ class Tank_barrel
 
 	sf::Clock timer;
 	sf::Time shot_interval;	//czas pomiedzy koelnymi strzalami
+
+	Names::barrel_size my_size;
 public:
-	Tank_barrel(const sf::Sprite& barrel_sprite, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern = nullptr);
+	Tank_barrel(const sf::Sprite& barrel_sprite, const Names::barrel_size &size, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern = nullptr);
 	~Tank_barrel();
 
 

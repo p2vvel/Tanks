@@ -6,7 +6,7 @@
 #include "bullet.h"
 
 
-Tank_barrel::Tank_barrel(const sf::Sprite& barrel_sprite, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern)
+Tank_barrel::Tank_barrel(const sf::Sprite& barrel_sprite, const Names::barrel_size& size, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern)
 {
 	barrel_body = new sf::Sprite(barrel_sprite);
 	barrel_body->setOrigin(barrel_body->getGlobalBounds().width / 2, barrel_body->getGlobalBounds().height * 0.30);
@@ -19,6 +19,8 @@ Tank_barrel::Tank_barrel(const sf::Sprite& barrel_sprite, Bullet_base* pattern, 
 	timer.restart();
 
 	bullet_pattern = pattern;
+
+	my_size = size;
 }
 
 Tank_barrel::~Tank_barrel()

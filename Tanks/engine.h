@@ -17,6 +17,8 @@
 
 #include "net_client.h"
 
+#include <stdlib.h>
+#include <time.h>
 
 
 #define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
@@ -25,6 +27,8 @@
 #define ADDRESS "127.0.0.1"
 #define PORT 3003
 
+
+#include "names.h"
 
 class Engine
 {
@@ -47,11 +51,13 @@ public:
 	void test();
 
 
+	
+	
+	Tank_barrel* generate_Barrel(const Names::tank_color& color, const Names::barrel_size& size) const;
+	Bullet_base* generate_Bullet_base(const Names::tank_color& color, const Names::barrel_size& size) const;
+	Tank* generate_Tank(const Names::tank_color& color, const Names::barrel_size& size) const;
+	Tank* generate_random_Tank() const;
 
-	enum tank_color { blue, dark, green, red, sand };
-	enum barrel_size { big, medium, small };
-	Tank_barrel* generate_Barrel(const Engine::tank_color& color, const Engine::barrel_size& size) const;
-	Bullet_base* generate_Bullet_base(const Engine::tank_color& color, const Engine::barrel_size& size) const;
-	Tank* generate_Tank(const Engine::tank_color& color, const Engine::barrel_size& size) const;
 
+	
 };
