@@ -12,7 +12,7 @@ class SwitchablSprite : public sf::Sprite
 {
 	bool visibility;
 public:
-	SwitchablSprite() : Sprite() {}
+	SwitchablSprite() : Sprite() { visibility = false; }
 	SwitchablSprite(const sf::Texture& texture, const sf::IntRect& rectangle) : Sprite(texture, rectangle) { visibility = false; }
 	SwitchablSprite(const sf::Sprite& sprite) : Sprite(sprite) { visibility = false; }
 	void draw(sf::RenderWindow& window) { if (visibility) window.draw(*this); }

@@ -4,242 +4,55 @@
 
 Tank_barrel* Engine::generate_Barrel(const Names::tank_color& color, const Names::barrel_size& size) const
 {
-	sf::IntRect texture_rect;
-
-	if (color == Names::tank_color::blue)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(tankBlue_barrel2_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(tankBlue_barrel3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(tankBlue_barrel1_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::green)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(tankGreen_barrel2_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(tankGreen_barrel3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(tankGreen_barrel1_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::red)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(tankRed_barrel2_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(tankRed_barrel3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(tankRed_barrel1_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::sand)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(tankSand_barrel2_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(tankSand_barrel3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(tankSand_barrel1_outline);
-			break;
-		}
-	}
-	else	//color == dark
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(tankDark_barrel2_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(tankDark_barrel3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(tankDark_barrel1_outline);
-			break;
-		}
-	}
-
-	sf::Sprite barrel_sprite(storage.texture_hq, texture_rect);
 	sf::Time shot_period;
 	Muzzle_flash* flash;// = new Muzzle_flash()
 
-	if (size == Names::barrel_size::small)
-	{
+	if (size == Names::barrel_size::small){
 		shot_period = sf::seconds(0.4);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotThin), 8);
 	}
-	else if (size == Names::barrel_size::medium)
-	{
+	else if (size == Names::barrel_size::medium)	{
 		shot_period = sf::seconds(0.8);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
-	else	//barrel_size == big
-	{
+	else{	//barrel_size == big
+
 		shot_period = sf::seconds(1.2);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
 
-	return new Tank_barrel(sf::Sprite(storage.texture_hq, texture_rect), size, (generate_Bullet_base(color, size)), shot_period, flash);
+	return new Tank_barrel(sf::Sprite(storage.texture_hq, Storage::get_BarrelRect(color, size)), size, color, (generate_Bullet_base(color, size)), shot_period, flash);
 }
 
 
 Bullet_base* Engine::generate_Bullet_base(const Names::tank_color& color, const Names::barrel_size& size) const
 {
-	sf::IntRect texture_rect;
-
-	if (color == Names::tank_color::blue)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(bulletBlue1_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(bulletBlue3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(bulletBlue2_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::green)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(bulletGreen1_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(bulletGreen3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(bulletGreen2_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::red)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(bulletRed1_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(bulletRed3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(bulletRed2_outline);
-			break;
-		}
-	}
-	else if (color == Names::tank_color::sand)
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(bulletSand1_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(bulletSand3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(bulletSand2_outline);
-			break;
-		}
-	}
-	else	//color == dark
-	{
-		switch (size)
-		{
-		case Names::barrel_size::small:
-			texture_rect = GET_SPRITE_HQ(bulletDark1_outline);
-			break;
-		case Names::barrel_size::medium:
-			texture_rect = GET_SPRITE_HQ(bulletDark3_outline);
-			break;
-		default:	//case big
-			texture_rect = GET_SPRITE_HQ(bulletDark2_outline);
-			break;
-		}
-	}
-
-
 	short power;
 	float speed;
 
-	if (size == Names::barrel_size::small)
-	{
+	if (size == Names::barrel_size::small) {
 		speed = 40;
 		power = 15;
 	}
-	else if (size == Names::barrel_size::medium)
-	{
+	else if (size == Names::barrel_size::medium) {
 		speed = 30;
 		power = 20;
 	}
-	else	//barrel_size == big
-	{
+	else {	//barrel_size == big{
 		speed = 25;
 		power = 40;
 	}
 
-
-
-	return new Bullet_base(sf::Sprite(storage.texture_hq, texture_rect), power, speed);
+	return new Bullet_base(sf::Sprite(storage.texture_hq, Storage::get_BulletRect(color, size)), power, speed);
 }
 
 
 Tank* Engine::generate_Tank(const Names::tank_color& color, const Names::barrel_size& size) const
 {
-	sf::IntRect texture_rect;
-	if (color == Names::tank_color::blue)
-	{
-		texture_rect = GET_SPRITE_HQ(tankBody_blue_outline);
-	}
-	else if (color == Names::tank_color::green)
-	{
-		texture_rect = GET_SPRITE_HQ(tankBody_green_outline);
-	}
-	else if (color == Names::tank_color::red)
-	{
-		texture_rect = GET_SPRITE_HQ(tankBody_red_outline);
-	}
-	else if (color == Names::tank_color::sand)
-	{
-		texture_rect = GET_SPRITE_HQ(tankBody_sand_outline);
-	}
-	else	//color == dark
-	{
-		texture_rect = GET_SPRITE_HQ(tankBody_dark_outline);
-	}
-
 	sf::IntRect skidmarks_rect = GET_SPRITE_HQ(tracksLarge);
 	skidmarks_rect.height = 6;
 
-	return new Tank(sf::Sprite(storage.texture_hq, texture_rect), color, generate_Barrel(color, size), new Skidmarks(new sf::Sprite(storage.texture_hq, skidmarks_rect), 40, 8));
+	return new Tank(sf::Sprite(storage.texture_hq, Storage::get_TankRect(color)), color, generate_Barrel(color, size), new Skidmarks(new sf::Sprite(storage.texture_hq, skidmarks_rect), 40, 8));
 }
 
 
@@ -250,7 +63,6 @@ Tank* Engine::generate_random_Tank() const
 	Names::barrel_size size;
 
 	short temp = rand() % 5;
-	std::cout << std::endl<<rand();
 
 	switch (temp) {
 	case 0:

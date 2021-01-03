@@ -101,7 +101,11 @@ class TanksServer{
 			this.data.players_data[temp_data.id] = temp_data;
 
 
-			this.data.players[temp_data.id].write(this.prepareDataToSend());
+			let temp = this.prepareDataToSend();
+
+			this.data.players[temp_data.id].write(temp);
+
+			console.log(temp)
 		}
 		catch(err){
 			console.log(err, data)

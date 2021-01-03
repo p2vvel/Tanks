@@ -39,8 +39,9 @@ class Tank_barrel
 	sf::Time shot_interval;	//czas pomiedzy koelnymi strzalami
 
 	Names::barrel_size my_size;
+	Names::tank_color my_color;
 public:
-	Tank_barrel(const sf::Sprite& barrel_sprite, const Names::barrel_size &size, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern = nullptr);
+	Tank_barrel(const sf::Sprite& barrel_sprite, const Names::barrel_size &size, const Names::tank_color &color, Bullet_base* pattern, const sf::Time& time_between_shots, Muzzle_flash* flash_pattern = nullptr);
 	~Tank_barrel();
 
 

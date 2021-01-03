@@ -49,19 +49,13 @@ void Engine::test()
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
 
-	std::vector<Tank*> enemies;/*
-	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
-	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));
-	enemies.push_back(generate_Tank(tank_color::green, barrel_size::big));*/
+	std::vector<Tank*> enemies;
 
 	std::vector<Bullet*> bullets;
 
 
 
 
-
-	//std::thread net_thread_tcp(&NetClient::listenTCP, net_client);
-	//std::thread net_thread_udp(&NetClient::listenUDP, net_client);
 
 	sf::Event ev;
 	while (window->isOpen())

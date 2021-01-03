@@ -1,8 +1,7 @@
 #include "data_serializers.h"
 #include "tank_barrel.h";
 #include "tank.h"
-
-//#include<cmath>
+#include "storage.h"
 
 using nlohmann::json;
 
@@ -16,6 +15,7 @@ void to_json(json& j, const Tank_barrel& barrel) {
 		}},
 		{"angle", barrel.angle},
 		{"size", Names::size_to_string(barrel.my_size)},
+		{"color", Names::color_to_string(barrel.my_color)},
 	};
 };
 
@@ -24,6 +24,8 @@ void from_json(const json& j, Tank_barrel& barrel) {
 	barrel.position = sf::Vector2f(j["pos"]["x"], j["pos"]["y"]);
 	barrel.angle = j["angle"];
 	barrel.my_size = Names::size_to_enum(j["size"]);
+	barrel.my_color = Names::color_to_enum(j["color"]);
+	barrel.barrel_body->setTextureRect(Storage::get_BarrelRect(barrel.my_color, barrel.my_size));
 };
 
 
@@ -48,7 +50,7 @@ void from_json(const nlohmann::json& j, Tank& tank) {
 	//tank.angle = j["angle"];
 	tank.set_position(sf::Vector2f(j["pos"]["x"], j["pos"]["y"]));
 	tank.set_angle(j["angle"]);
-	//tank.position = sf::Vector2f(j["pos"]["x"], j["pos"]["y"]);
 	tank.my_color = Names::color_to_enum(j["color"]);
 	from_json(j["barrel"], *(tank.barrel));
+	tank.tank_body->setTextureRect(Storage::get_TankRect(tank.my_color));
 };
