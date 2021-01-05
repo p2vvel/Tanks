@@ -46,6 +46,8 @@ void Engine::test()
 
 	Tank* tank = generate_random_Tank();//generate_Tank(tank_color::green, barrel_size::big);
 
+	tank->barrel->bullet_pattern->set_shooter_ID(net_client->my_id);	//sets default id for newly created bullets
+
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
 
@@ -67,9 +69,6 @@ void Engine::test()
 				window->close();
 				for (int i = 0; i < enemies.size(); i++)
 					delete enemies[i];
-				//net_client->setListeningMode(false);
-				//net_thread_tcp.detach();
-				//net_thread_udp.detach();
 				return;
 			}
 		}
@@ -81,8 +80,9 @@ void Engine::test()
 		//Control
 		control_tank(*tank);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			if (tank->barrel->shot())
+			if (tank->barrel->shot()) 
 				bullets.push_back(tank->barrel->generate_bullet());
+			
 
 		tank->update();
 
@@ -90,7 +90,8 @@ void Engine::test()
 
 		//Send
 		nlohmann::json j = *tank;
-		j["id"] = net_client->getID();
+		if (tank->barrel->shot_recently)
+			to_json(j["shot"], (*bullets[bullets.size() - 1]));
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
 
 
@@ -103,6 +104,9 @@ void Engine::test()
 		nlohmann::json* game_data_old = (net_client->json_buffer_old);
 
 
+		//##############
+		//Players update:
+		//##############
 
 		//Reaction for new player joining or enemy disconnect
 		if ((*game_data)["players"] - 1 != enemies.size()) {
@@ -117,16 +121,12 @@ void Engine::test()
 			else {
 				//Add new player
 				std::cout << "\nPlayer left";// << std::endl << game_data->dump(3);
-
 				do
 				{
 					enemies.push_back(generate_Tank(Names::tank_color::green, Names::barrel_size::big));
 				} while ((*game_data)["players"] - 1 != enemies.size());
 			}
 		}
-
-
-
 
 		bool mine_updated = false;
 		for (int i = 0; i < (*game_data)["players"]; i++)
@@ -143,6 +143,37 @@ void Engine::test()
 
 
 
+		//##############
+		//Bullets update:
+		//##############
+
+
+		if ((*game_data)["bullets"].size() != bullets.size()) {
+			if ((*game_data)["bullets"].size() < bullets.size()) {
+				do {
+					delete bullets[bullets.size() - 1];	//delete object
+					bullets.pop_back();	//pop pointer
+				} while ((*game_data)["bullets"].size() != bullets.size());
+			}
+			else {
+				do
+				{
+					bullets.push_back(tank->barrel->generate_bullet());
+				} while ((*game_data)["bullets"].size() != bullets.size());
+			}
+		}
+
+		for (int i = 0; i < (*game_data)["bullets"].size(); i++)
+		{
+			//std::cout << std::endl << (*game_data)["bullets"][i]["color"] << "\t" << (*game_data)["bullets"][i]["size"];
+			from_json((*game_data)["bullets"][i], *bullets[i]);
+		}
+
+
+
+
+
+
 		//SEND
 		//LISTEN
 		//UPDATE
@@ -156,7 +187,7 @@ void Engine::test()
 
 		for (auto a : bullets)
 		{
-			a->update();
+			//a->update();
 			a->draw(*window);
 		}
 
@@ -177,13 +208,6 @@ void Engine::test()
 
 		window->display();
 	}
-
-
-
-
-	//net_thread_tcp.join();
-	//net_thread_udp.join();
-
 }
 
 

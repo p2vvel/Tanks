@@ -10,7 +10,6 @@ Bullet::Bullet(const Bullet_base& pattern, const sf::Vector2f& new_pos, const sh
 
 Bullet::~Bullet()
 {
-	delete bullet_body;
 }
 
 void Bullet::update()

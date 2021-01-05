@@ -2,6 +2,7 @@
 #include "tank_barrel.h";
 #include "tank.h"
 #include "storage.h"
+#include "bullet.h"
 
 using nlohmann::json;
 
@@ -47,10 +48,40 @@ void to_json(nlohmann::json& j, const Tank& tank) {
 void from_json(const nlohmann::json& j, Tank& tank) {
 	tank.tank_id = j["id"];
 	tank.speed = j["speed"];
-	//tank.angle = j["angle"];
 	tank.set_position(sf::Vector2f(j["pos"]["x"], j["pos"]["y"]));
-	tank.set_angle(j["angle"]);
+	tank.angle = j["angle"];
+	tank.set_angle(tank.angle);
 	tank.my_color = Names::color_to_enum(j["color"]);
 	from_json(j["barrel"], *(tank.barrel));
 	tank.tank_body->setTextureRect(Storage::get_TankRect(tank.my_color));
+};
+
+
+void to_json(nlohmann::json& j, const Bullet& bullet) {
+	sf::Vector2f pos = bullet.bullet_body->getPosition();
+	j = {
+		{"shooter", bullet.shooter_id},
+		{"power", bullet.power},
+		{"speed", bullet.speed},
+		{"angle", bullet.angle},
+		{"pos", {
+			{"x", pos.x},
+			{"y", pos.y},
+		}},
+		{"color", Names::color_to_string(bullet.my_color)},
+		{"size", Names::size_to_string(bullet.my_size)}
+	};
+};
+
+
+void from_json(const nlohmann::json& j, Bullet& bullet) {
+	bullet.shooter_id = j["shooter"];
+	bullet.power = j["power"];
+	bullet.speed = j["speed"];
+	bullet.angle =j ["angle"];
+	bullet.my_color = Names::color_to_enum(j["color"]);
+	bullet.my_size = Names::size_to_enum(j["size"]);
+	bullet.bullet_body->setTextureRect(Storage::get_BulletRect(bullet.my_color, bullet.my_size));
+	bullet.bullet_body->setPosition(j["pos"]["x"], j["pos"]["y"]);
+	bullet.bullet_body->setRotation(bullet.angle);
 };

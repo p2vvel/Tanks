@@ -14,7 +14,7 @@ namespace Names {
 			return Names::tank_color::red;
 		else if (str == "sand")
 			return Names::tank_color::sand;
-		else// if (str == "green")
+		else	// if (str == "green")
 			return Names::tank_color::green;
 	};
 
@@ -38,7 +38,7 @@ namespace Names {
 			return Names::barrel_size::small;
 		else if (str == "medium")
 			return Names::barrel_size::medium;
-		else// if (str == "big")
+		else	// if (str == "big")
 			return Names::barrel_size::big;
 	}
 
@@ -48,7 +48,7 @@ namespace Names {
 			return "small";
 		case  Names::barrel_size::medium:
 			return "medium";
-		default:	//		case  Names::barrel_size::big
+		default:	//case  Names::barrel_size::big
 			return "big";
 		};
 	}

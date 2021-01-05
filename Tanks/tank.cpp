@@ -27,6 +27,7 @@ Tank::Tank(const sf::Sprite& tank_sprite, const Names::tank_color& color, Tank_b
 	skidmarks = marks;
 	
 	tank_id = -1;
+
 }
 
 
@@ -110,6 +111,8 @@ void Tank::draw(sf::RenderWindow& win, const bool& draw_skidmarks)
 		this->draw_skidmarks(win);
 
 
+
+	shot_recently = false;	//end of frame, so shot indicator can be resetted
 	win.draw(*tank_body);
 	barrel->draw(win);
 }
@@ -145,10 +148,3 @@ void Tank::turn_right()
 	this->add_angle(TURN_ANGLE);
 }
 
-bool Tank::shot()
-{
-	bool result = barrel->shot();
-
-
-	return result;
-}

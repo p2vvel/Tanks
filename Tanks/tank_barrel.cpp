@@ -22,6 +22,8 @@ Tank_barrel::Tank_barrel(const sf::Sprite& barrel_sprite, const Names::barrel_si
 
 	my_size = size;
 	my_color = color;
+
+	shot_recently = false;
 }
 
 Tank_barrel::~Tank_barrel()
@@ -45,6 +47,8 @@ void Tank_barrel::update()
 
 void Tank_barrel::draw(sf::RenderWindow& window)
 {
+	shot_recently = false;	//end of frame so shot indicator can be resetted
+
 	if (muzzle_flash != nullptr)
 		muzzle_flash->draw(window);
 
@@ -59,6 +63,8 @@ bool Tank_barrel::shot()
 
 		if (muzzle_flash != nullptr)
 			muzzle_flash->set_visibility(true);
+
+		shot_recently = true;	//indicates that player has shot a bullet
 
 		return true;
 	}

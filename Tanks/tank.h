@@ -49,6 +49,7 @@ class Tank
 	short tank_id;
 
 	Names::tank_color my_color;
+	bool shot_recently;
 
 public:
 	Tank(const sf::Sprite& tank_sprite, const Names::tank_color &color, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
@@ -72,5 +73,4 @@ public:
 	void decelerate();
 	void turn_left();
 	void turn_right();
-	bool shot();
 };
