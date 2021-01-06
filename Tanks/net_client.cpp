@@ -94,7 +94,7 @@ void NetClient::readDataTCP() {
 			read_data_recently = true;
 			
 			//std::cout << "\nNew data";
-			//std::cout << std::endl << this->json_buffer_temp->dump(3);
+			//std::cout << std::endl << this->json_buffer->dump(3);
 		}
 		catch (std::exception& e) {
 			std::cout << "Parse error, rejecting packet:\n" << temp_buffer << std::endl;
@@ -119,6 +119,9 @@ void NetClient::readDataUDP() {
 
 			*(this->json_buffer) = json::parse(temp_buffer);
 			read_data_recently = true;
+
+			//std::cout << "\nNew data";
+			//std::cout << std::endl << this->json_buffer->dump(3);
 		}
 		catch (std::exception& e) {
 			std::cout << "Parse error, rejecting packet:\n" << temp_buffer << std::endl;

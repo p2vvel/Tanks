@@ -42,6 +42,9 @@ void to_json(nlohmann::json& j, const Tank& tank) {
 		}},
 		{"barrel", *(tank.barrel)},
 		{"color", Names::color_to_string(tank.my_color)},
+		{"health", tank.health},
+		{"score", tank.score},
+		{"cycle", tank.cycle},
 	};
 };
 
@@ -54,6 +57,18 @@ void from_json(const nlohmann::json& j, Tank& tank) {
 	tank.my_color = Names::color_to_enum(j["color"]);
 	from_json(j["barrel"], *(tank.barrel));
 	tank.tank_body->setTextureRect(Storage::get_TankRect(tank.my_color));
+
+
+	tank.score = j["score"];
+	if (tank.health != j["health"] && j["health"] != 0) {
+		tank.tank_body->setScale(1.05, -1.1);	//small "animation" that shows player that his tank was hit
+		tank.barrel->barrel_body->setScale(1.05, -1.1);		//small "animation" that shows player that his tank was hit
+	}
+	tank.health = j["health"];
+	if (tank.health > 0)
+		tank.cycle = 0;
+	else
+		tank.cycle = j["cycle"];
 };
 
 
@@ -78,7 +93,7 @@ void from_json(const nlohmann::json& j, Bullet& bullet) {
 	bullet.shooter_id = j["shooter"];
 	bullet.power = j["power"];
 	bullet.speed = j["speed"];
-	bullet.angle =j ["angle"];
+	bullet.angle = j["angle"];
 	bullet.my_color = Names::color_to_enum(j["color"]);
 	bullet.my_size = Names::size_to_enum(j["size"]);
 	bullet.bullet_body->setTextureRect(Storage::get_BulletRect(bullet.my_color, bullet.my_size));

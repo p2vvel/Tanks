@@ -80,7 +80,7 @@ void Engine::test()
 		//Control
 		control_tank(*tank);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			if (tank->barrel->shot()) 
+			if (tank->health > 0 && tank->barrel->shot()) 
 				bullets.push_back(tank->barrel->generate_bullet());
 			
 
@@ -102,6 +102,7 @@ void Engine::test()
 		//update data
 		nlohmann::json* game_data = (net_client->json_buffer);
 		nlohmann::json* game_data_old = (net_client->json_buffer_old);
+
 
 
 		//##############
@@ -164,14 +165,7 @@ void Engine::test()
 		}
 
 		for (int i = 0; i < (*game_data)["bullets"].size(); i++)
-		{
-			//std::cout << std::endl << (*game_data)["bullets"][i]["color"] << "\t" << (*game_data)["bullets"][i]["size"];
 			from_json((*game_data)["bullets"][i], *bullets[i]);
-		}
-
-
-
-
 
 
 		//SEND
@@ -184,14 +178,8 @@ void Engine::test()
 
 
 		window->clear(sf::Color(13, 23, 36));
-
 		for (auto a : bullets)
-		{
-			//a->update();
 			a->draw(*window);
-		}
-
-
 
 		for (auto t : enemies)
 			t->draw_skidmarks(*window);

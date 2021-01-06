@@ -26,8 +26,12 @@ class Tank_barrel;
 
 class Tank
 {
+	short health;
+	short score;
+
 	friend void to_json(nlohmann::json& j, const Tank& tank);
 	friend void from_json(const nlohmann::json& j, Tank& tank);
+
 
 	friend class Engine;
 
@@ -49,8 +53,8 @@ class Tank
 	short tank_id;
 
 	Names::tank_color my_color;
-	bool shot_recently;
 
+	short cycle;
 public:
 	Tank(const sf::Sprite& tank_sprite, const Names::tank_color &color, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
 	~Tank();
@@ -73,4 +77,6 @@ public:
 	void decelerate();
 	void turn_left();
 	void turn_right();
+
+	void control_death_cycles();
 };

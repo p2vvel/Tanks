@@ -53,6 +53,7 @@ void Tank_barrel::draw(sf::RenderWindow& window)
 		muzzle_flash->draw(window);
 
 	window.draw(*barrel_body);
+	barrel_body->setScale(1, -1);	//restore sprite after being shot animation
 }
 
 bool Tank_barrel::shot()

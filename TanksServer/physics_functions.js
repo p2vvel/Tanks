@@ -9,3 +9,9 @@ export function calculate_vector(distance, angle){
 
 	return result;
 }
+
+
+export function check_collision(a, b){
+	let distance = Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2))
+	return distance <= (a.r + b.r)
+}

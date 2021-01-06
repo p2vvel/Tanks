@@ -24,6 +24,8 @@ class Tank_barrel
 
 	friend void to_json(nlohmann::json& j, const Tank_barrel& barrel);
 	friend void from_json(const nlohmann::json& j, Tank_barrel& barrel);
+	friend void from_json(const nlohmann::json& j, Tank& tank);
+
 
 	friend class Tank;
 	friend class Engine;
