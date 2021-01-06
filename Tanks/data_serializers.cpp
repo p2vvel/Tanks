@@ -58,6 +58,8 @@ void from_json(const nlohmann::json& j, Tank& tank) {
 	from_json(j["barrel"], *(tank.barrel));
 	tank.tank_body->setTextureRect(Storage::get_TankRect(tank.my_color));
 
+	if (j["shot"] == true)
+		tank.barrel->muzzle_flash->set_visibility(true);
 
 	tank.score = j["score"];
 	if (tank.health != j["health"] && j["health"] != 0) {

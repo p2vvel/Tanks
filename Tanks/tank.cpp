@@ -103,6 +103,7 @@ void Tank::draw_skidmarks(sf::RenderWindow& win) {
 
 void Tank::draw(sf::RenderWindow& win, const bool& draw_skidmarks) {
 	if (health <= 0) {
+		skidmarks->clear_all_marks();
 		control_death_cycles();
 		barrel->shot_recently = false;	//have to reset that variable manually because barrels draw function isnt called if player is dead
 		if (cycle <= DEATH_CYCLE_LENGTH * 5)

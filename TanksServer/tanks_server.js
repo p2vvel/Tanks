@@ -93,23 +93,26 @@ class TanksServer {
 	handleDataTCP(data) {
 		let temp_data;
 		try {
-
+			
 			temp_data = JSON.parse(data);
+			let new_player = !(temp_data.id in this.data.players_data);
 
-			if (!(temp_data.id in this.data.players_data)) {
-				this.active_players += 1;	//increments active players after receiving first packet from new player
-				console.log(`Active players: ${this.active_players}`)
-			}
+
+			
 
 			if ('shot' in temp_data) {
-				// console.log(temp_data);
 				this.data.bullets_data.push(temp_data.shot);
-				delete temp_data.shot;
+				temp_data.shot = true;	//indicates that client should draw enemies muzzle flash
 			}
 
 			this.data.players_data[temp_data.id] = temp_data;
 
 
+			if (new_player) {
+				this.active_players += 1;	//increments active players after receiving first packet from new player
+				console.log(`Active players: ${this.active_players}`)
+				this.handle_Tank_Respawn(temp_data.id);	//uses respawn function to set new player position so it doesnt collide with any player
+			}
 
 			//Updates
 			this.update_Tank(temp_data.id);
@@ -163,8 +166,6 @@ class TanksServer {
 			let temp_player = this.data.players_data[index];
 
 			temp.tanks.push(temp_player);
-
-
 		}
 
 		temp.players = this.active_players;
@@ -175,12 +176,9 @@ class TanksServer {
 	}
 
 	update_Bullets() {
-		let temp = this.data.bullets_data.length;
 		this.data.bullets_data = this.data.bullets_data.filter((e) => ((e.pos.x >= -50 && e.pos.x <= screen.width + 50) && (e.pos.y >= -50 && e.pos.y <= screen.height + 50)));	//delete bullets that flew away from displayed area
 
-		if (temp != this.data.bullets_data.length)
-			console.log("Bullet deleted");
-
+		//bullets flight:
 		for (let b of this.data.bullets_data) {
 			let movement_vector = Physics.calculate_vector(b.speed, b.angle);
 			b.pos.x += movement_vector.x;
@@ -312,12 +310,8 @@ class TanksServer {
 				tank.health = 100;	//restores full health
 				tank.cycle = 0;	//resets death animation cycles
 				tank.speed = 0;	//stops dead tank
-				//zapisansko
 				break;
 			}
-
-
-
 		}
 	}
 

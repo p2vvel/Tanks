@@ -94,4 +94,9 @@ public:
 		for (int i = 0; i < size; i++)
 			tab[i].draw(win);//win.draw(tab[i]);
 	}
+
+	void clear_all_marks() {
+		for (int i = 0; i < size; i++)
+			tab[i].set_visible(false);
+	}
 };
