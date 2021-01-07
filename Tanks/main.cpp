@@ -1,7 +1,8 @@
 #include<SFML/Graphics.hpp>
 #include "engine.h"
 
-
+#include "info.h"
+#include "storage.h"
 
 int main()
 {
@@ -15,10 +16,6 @@ int main()
 
 
 	delete engine;
-
-
-
-
 
 
 

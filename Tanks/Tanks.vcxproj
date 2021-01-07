@@ -153,6 +153,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="data_serializers.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="info.h" />
     <ClInclude Include="muzzle_flash.h" />
     <ClInclude Include="names.h" />
     <ClInclude Include="net_client.h" />

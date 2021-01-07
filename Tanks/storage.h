@@ -43,6 +43,8 @@ public:
 	sf::Texture texture;
 	sf::Texture texture_hq;
 
+	sf::Font font;
+
 
 #define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
 
@@ -51,6 +53,20 @@ public:
 	{
 		texture.loadFromFile("./images/allSprites_default.png");
 		texture_hq.loadFromFile("./images/allSprites_retina.png");
+		font.loadFromFile("./fonts/PixelSplitter-Bold.ttf");
+	}
+
+	static sf::Color get_tank_color(const Names::tank_color& color) {
+		if (color == Names::tank_color::blue)
+			return sf::Color(65, 159, 221);
+		else if (color == Names::tank_color::green)
+			return sf::Color(46, 204, 113);
+		else if (color == Names::tank_color::red)
+			return sf::Color(231, 76, 60);
+		else if (color == Names::tank_color::sand)
+			return sf::Color(245, 225, 180);
+		else	//color == dark
+			return sf::Color(95, 93, 85);
 	}
 
 	static sf::IntRect get_TankRect(const Names::tank_color& color) {

@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "info.h"
+
 
 #define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
 
@@ -35,7 +37,7 @@ class Engine
 	Storage storage;
 	sf::RenderWindow* window;
 
-	NetClient *net_client;
+	NetClient* net_client;
 
 	short mouse_aim_angle(const Tank_barrel& barrel);
 	void control_tank(Tank& tank);
@@ -51,13 +53,13 @@ public:
 	void test();
 
 
-	
-	
+
+
 	Tank_barrel* generate_Barrel(const Names::tank_color& color, const Names::barrel_size& size) const;
 	Bullet_base* generate_Bullet_base(const Names::tank_color& color, const Names::barrel_size& size) const;
 	Tank* generate_Tank(const Names::tank_color& color, const Names::barrel_size& size) const;
 	Tank* generate_random_Tank() const;
 
 
-	
+
 };

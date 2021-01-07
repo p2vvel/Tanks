@@ -55,6 +55,7 @@ class TanksServer {
 		this.data.players = {};	//players connection
 		this.data.players_data = {};	//current player data
 		this.data.bullets_data = [];
+		this.data.score_data = {};
 
 
 		setInterval(this.update, 16);	//updates bullets positions every frame
@@ -93,29 +94,38 @@ class TanksServer {
 	handleDataTCP(data) {
 		let temp_data;
 		try {
-			
+
 			temp_data = JSON.parse(data);
 			let new_player = !(temp_data.id in this.data.players_data);
 
 
-			
+
 
 			if ('shot' in temp_data) {
 				this.data.bullets_data.push(temp_data.shot);
 				temp_data.shot = true;	//indicates that client should draw enemies muzzle flash
 			}
 
-			this.data.players_data[temp_data.id] = temp_data;
-
+			if (!new_player && 'has_to_be_killed' in this.data.players_data[temp_data.id] && this.data.players_data[temp_data.id].has_to_be_killed === true) {
+				console.log("ehh")
+				this.data.players_data[temp_data.id] = temp_data;
+				this.data.players_data[temp_data.id].health = 0;
+			}
+			else
+				this.data.players_data[temp_data.id] = temp_data;
 
 			if (new_player) {
+				this.data.score_data[temp_data.id] = 0;
 				this.active_players += 1;	//increments active players after receiving first packet from new player
 				console.log(`Active players: ${this.active_players}`)
 				this.handle_Tank_Respawn(temp_data.id);	//uses respawn function to set new player position so it doesnt collide with any player
 			}
 
+			this.data.players_data[temp_data.id].score = this.data.score_data[temp_data.id];
+
 			//Updates
 			this.update_Tank(temp_data.id);
+
 
 
 
@@ -222,10 +232,12 @@ class TanksServer {
 			};
 
 			if (Physics.check_collision(tank_collision_area, bullet_collision_area)) {
-				b.shooter = -1;
 				this.data.players_data[tank_id].health -= b.power;
+				if (this.data.players_data[tank_id].health < 0)
+					this.data.players_data[tank_id].health = 0;
 				if (b.shooter in this.data.players_data)	//if shooter didnt rage quit
-					this.data.players_data[b.shooter].score += 1;	//someones bullet killed me, his profit	:(
+					this.data.score_data[b.shooter] += b.power;	//someones bullet killed me, his profit	:(
+				b.shooter = -1;	//indicates that bullet should be deleted later
 			}
 		}
 
@@ -252,7 +264,7 @@ class TanksServer {
 
 			if (Physics.check_collision(tank_collision_area, enemy_collision_area)) {
 				tank.health = 0;
-				this.data.players_data[enemy].health = 0;
+				this.data.players_data[enemy].has_to_be_killed = true;// = 0;
 			}
 		}
 	}
