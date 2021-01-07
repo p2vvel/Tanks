@@ -107,7 +107,6 @@ class TanksServer {
 			}
 
 			if (!new_player && 'has_to_be_killed' in this.data.players_data[temp_data.id] && this.data.players_data[temp_data.id].has_to_be_killed === true) {
-				console.log("ehh")
 				this.data.players_data[temp_data.id] = temp_data;
 				this.data.players_data[temp_data.id].health = 0;
 			}
