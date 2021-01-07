@@ -2,20 +2,19 @@
 
 
 
-Tank_barrel* Engine::generate_Barrel(const Names::tank_color& color, const Names::barrel_size& size) const
-{
+Tank_barrel* Engine::generate_Barrel(const Names::tank_color& color, const Names::barrel_size& size) const {
 	sf::Time shot_period;
 	Muzzle_flash* flash;
 
-	if (size == Names::barrel_size::small){
+	if (size == Names::barrel_size::small) {
 		shot_period = sf::seconds(0.4);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotThin), 8);
 	}
-	else if (size == Names::barrel_size::medium)	{
+	else if (size == Names::barrel_size::medium) {
 		shot_period = sf::seconds(0.8);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
-	else{	//barrel_size == big
+	else {	//barrel_size == big
 		shot_period = sf::seconds(1.2);
 		flash = new Muzzle_flash(storage.texture_hq, GET_SPRITE_HQ(shotLarge), 8);
 	}
@@ -24,8 +23,7 @@ Tank_barrel* Engine::generate_Barrel(const Names::tank_color& color, const Names
 }
 
 
-Bullet_base* Engine::generate_Bullet_base(const Names::tank_color& color, const Names::barrel_size& size) const
-{
+Bullet_base* Engine::generate_Bullet_base(const Names::tank_color& color, const Names::barrel_size& size) const {
 	short power;
 	float speed;
 
@@ -46,8 +44,7 @@ Bullet_base* Engine::generate_Bullet_base(const Names::tank_color& color, const 
 }
 
 
-Tank* Engine::generate_Tank(const Names::tank_color& color, const Names::barrel_size& size) const
-{
+Tank* Engine::generate_Tank(const Names::tank_color& color, const Names::barrel_size& size) const {
 	sf::IntRect skidmarks_rect = GET_SPRITE_HQ(tracksLarge);
 	skidmarks_rect.height = 6;
 
@@ -55,8 +52,7 @@ Tank* Engine::generate_Tank(const Names::tank_color& color, const Names::barrel_
 }
 
 
-Tank* Engine::generate_random_Tank() const
-{
+Tank* Engine::generate_random_Tank() const {
 	srand(time(NULL));
 	Names::tank_color color;
 	Names::barrel_size size;

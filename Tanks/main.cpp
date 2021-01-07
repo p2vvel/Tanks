@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	std::cout << "Trying to connect to server at " << address << ":" << port << std::endl;
 
 	Engine *engine = new Engine(win, (argc >= 2 ?  atoi(argv[1]) : 3003), (argc >= 3 ? argv[2] : "127.0.0.1"));
-	engine->test();
+	engine->game();
 	delete engine;
 
 

@@ -5,6 +5,7 @@ namespace Names {
 	enum class tank_color { blue, dark, green, red, sand };
 	enum class barrel_size { big, medium, small };
 
+
 	inline Names::tank_color color_to_enum(const std::string& str) {
 		if (str == "blue")
 			return Names::tank_color::blue;
@@ -17,6 +18,7 @@ namespace Names {
 		else	// if (str == "green")
 			return Names::tank_color::green;
 	};
+
 
 	inline std::string color_to_string(const Names::tank_color& color) {
 		switch (color) {
@@ -33,6 +35,7 @@ namespace Names {
 		};
 	}
 
+
 	inline Names::barrel_size size_to_enum(const std::string& str) {
 		if (str == "small")
 			return Names::barrel_size::small;
@@ -41,6 +44,7 @@ namespace Names {
 		else	// if (str == "big")
 			return Names::barrel_size::big;
 	}
+
 
 	inline std::string size_to_string(const Names::barrel_size& size) {
 		switch (size) {

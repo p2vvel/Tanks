@@ -4,11 +4,11 @@
 
 #include "names.h"
 
-//Klasa pojemnika na przechowywanie zasobow (np. spritey)
+
+//Storage for sprites and fonts
 class Storage
 {
 public:
-
 	enum sprite_index {
 		barrelBlack_side, barrelBlack_top, barrelGreen_side, barrelGreen_top, barrelRed_side, barrelRed_top, barrelRust_side, barrelRust_top,
 		barricadeMetal, barricadeWood, bulletBlue1, bulletBlue1_outline, bulletBlue2, bulletBlue2_outline, bulletBlue3, bulletBlue3_outline,
@@ -36,9 +36,8 @@ public:
 		treeGreen_twigs, wireCrooked, wireStraight
 	};
 
-	const static sf::IntRect sprite_rects[]; 
-
-	const static sf::IntRect sprite_rects_hq[]; 
+	const static sf::IntRect sprite_rects[];
+	const static sf::IntRect sprite_rects_hq[];
 
 	sf::Texture texture;
 	sf::Texture texture_hq;
@@ -46,15 +45,12 @@ public:
 	sf::Font font;
 
 
-#define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
-
-
-	Storage()
-	{
+	Storage()	{
 		texture.loadFromFile("./images/allSprites_default.png");
 		texture_hq.loadFromFile("./images/allSprites_retina.png");
 		font.loadFromFile("./fonts/PixelSplitter-Bold.ttf");
 	}
+
 
 	static sf::Color get_tank_color(const Names::tank_color& color) {
 		if (color == Names::tank_color::blue)
@@ -68,6 +64,7 @@ public:
 		else	//color == dark
 			return sf::Color(95, 93, 85);
 	}
+
 
 	static sf::IntRect get_TankRect(const Names::tank_color& color) {
 		if (color == Names::tank_color::blue)
@@ -84,8 +81,7 @@ public:
 
 
 	static sf::IntRect get_BarrelRect(const Names::tank_color& color, const Names::barrel_size& size) {
-		if (color == Names::tank_color::blue)
-		{
+		if (color == Names::tank_color::blue) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::tankBlue_barrel2_outline];
@@ -95,8 +91,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::tankBlue_barrel1_outline];
 			}
 		}
-		else if (color == Names::tank_color::green)
-		{
+		else if (color == Names::tank_color::green) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::tankGreen_barrel2_outline];
@@ -106,8 +101,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::tankGreen_barrel1_outline];
 			}
 		}
-		else if (color == Names::tank_color::red)
-		{
+		else if (color == Names::tank_color::red) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::tankRed_barrel2_outline];
@@ -117,8 +111,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::tankRed_barrel1_outline];
 			}
 		}
-		else if (color == Names::tank_color::sand)
-		{
+		else if (color == Names::tank_color::sand) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::tankSand_barrel2_outline];
@@ -128,8 +121,8 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::tankSand_barrel1_outline];
 			}
 		}
-		else	//color == dark
-		{
+		else {
+			//color == dark
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::tankDark_barrel2_outline];
@@ -142,9 +135,8 @@ public:
 	}
 
 
-	static sf::IntRect get_BulletRect(const Names::tank_color& color, const Names::barrel_size& size)  {
-		if (color == Names::tank_color::blue)
-		{
+	static sf::IntRect get_BulletRect(const Names::tank_color& color, const Names::barrel_size& size) {
+		if (color == Names::tank_color::blue) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::bulletBlue1_outline];
@@ -154,8 +146,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::bulletBlue2_outline];
 			}
 		}
-		else if (color == Names::tank_color::green)
-		{
+		else if (color == Names::tank_color::green) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::bulletGreen1_outline];
@@ -165,8 +156,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::bulletGreen2_outline];
 			}
 		}
-		else if (color == Names::tank_color::red)
-		{
+		else if (color == Names::tank_color::red) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::bulletRed1_outline];
@@ -176,8 +166,7 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::bulletRed2_outline];
 			}
 		}
-		else if (color == Names::tank_color::sand)
-		{
+		else if (color == Names::tank_color::sand) {
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::bulletSand1_outline];
@@ -187,8 +176,8 @@ public:
 				return sprite_rects_hq[Storage::sprite_index::bulletSand2_outline];
 			}
 		}
-		else	//color == dark
-		{
+		else {
+			//color == dark
 			switch (size) {
 			case Names::barrel_size::small:
 				return sprite_rects_hq[Storage::sprite_index::bulletDark1_outline];
@@ -199,5 +188,4 @@ public:
 			}
 		}
 	}
-
 };

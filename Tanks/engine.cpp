@@ -1,11 +1,10 @@
-#include "engine.h"
-#include<iostream>
-
 #include<nlohmann/json.hpp>
+#include<iostream>
+#include "engine.h"
+
+
 
 Engine::Engine() {
-	//pass
-	//my_id = ' ';
 }
 
 
@@ -21,7 +20,7 @@ Engine::~Engine() {
 
 
 const sf::Vector2f& Engine::calculate_vector(const float& distance_, const short& angle_) {
-	float rad_angle = (3.1415926536 / 180) * (angle_);	//kat w radianach - w takiej postaci funkcje z cmath je przyjmuja
+	float rad_angle = (3.1415926536 / 180) * (angle_);	//angle in radians
 
 	float y = distance_ * -cos(rad_angle);
 	float x = distance_ * sin(rad_angle);
@@ -31,17 +30,14 @@ const sf::Vector2f& Engine::calculate_vector(const float& distance_, const short
 
 
 
-void Engine::test() {
+void Engine::game() {
 	if (!net_client->succesfullConnection())
 		return;
 
-	Tank* tank = generate_random_Tank();//generate_Tank(tank_color::green, barrel_size::big
+	Tank* tank = generate_random_Tank();	//generate_Tank(tank_color::green, barrel_size::big
 	tank->barrel->bullet_pattern->set_shooter_ID(net_client->my_id);	//sets default id for newly created bullets
 	tank->set_position(sf::Vector2f(100, 100));
 	tank->set_ID(net_client->my_id);
-
-	
-
 
 
 	//Info
@@ -76,46 +72,38 @@ void Engine::test() {
 		}
 
 
-
-
-
 		//Control
 		control_tank(*tank);
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			if (tank->health > 0 && tank->barrel->shot())
 				bullets.push_back(tank->barrel->generate_bullet());
 
-
 		tank->update();
 
 
-
-		//Send
+		//Send data
 		nlohmann::json j = *tank;
 		if (tank->barrel->shot_recently)
 			to_json(j["shot"], (*bullets[bullets.size() - 1]));
 		net_client->sendDataTCP(j.dump().c_str(), j.dump().size());
 
 
-
 		//Receive data
 		net_client->readDataTCP();
 
-		//update data
+
+		//Update data
 		nlohmann::json* game_data = (net_client->json_buffer);
 		nlohmann::json* game_data_old = (net_client->json_buffer_old);
 
 
 
-		//##############
-		//Players update:
-		//##############
-
-		//Reaction for new player joining or enemy disconnect
+		//Players update
 		if ((*game_data)["players"] - 1 != enemies.size()) {
+			//Reaction for new player joining or enemy disconnect
 			if ((*game_data)["players"] - 1 < enemies.size()) {
-				//Delete player
 				do {
+					//Delete player
 					delete enemies[enemies.size() - 1];	//delete object
 					enemies.pop_back();	//pop pointer
 
@@ -127,10 +115,11 @@ void Engine::test() {
 				} while ((*game_data)["players"] - 1 != enemies.size());
 			}
 			else {
-				//Add new player
 				do
 				{
+					//Add new player
 					enemies.push_back(generate_Tank(Names::tank_color::green, Names::barrel_size::big));
+
 					//update scoreboard
 					enemies_score.push_back(new Info);
 					enemies_score[enemies_score.size() - 1]->setFont(storage.font);
@@ -157,11 +146,7 @@ void Engine::test() {
 
 
 
-		//##############
 		//Bullets update:
-		//##############
-
-
 		if ((*game_data)["bullets"].size() != bullets.size()) {
 			if ((*game_data)["bullets"].size() < bullets.size()) {
 				do {
@@ -171,13 +156,13 @@ void Engine::test() {
 			}
 			else {
 				do
-				{
 					bullets.push_back(tank->barrel->generate_bullet());
-				} while ((*game_data)["bullets"].size() != bullets.size());
+				while ((*game_data)["bullets"].size() != bullets.size());
 			}
 		}
 		for (int i = 0; i < (*game_data)["bullets"].size(); i++)
 			from_json((*game_data)["bullets"][i], *bullets[i]);
+
 
 
 		tank->update();
@@ -188,7 +173,6 @@ void Engine::test() {
 		my_health << tank->health << "HP";
 		my_score.clear_buffer();
 		my_score << tank->score << "PTS";
-
 
 		for (int i = 0; i < enemies_score.size(); i++) {
 			enemies_score[i]->clear_buffer();

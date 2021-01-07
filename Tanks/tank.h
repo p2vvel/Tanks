@@ -24,41 +24,33 @@ class Tank_barrel;
 #define IDLE_SPEED_LOSS (handling / 8.0)
 
 
-class Tank
-{
-	short health;
-	short score;
-
+class Tank{
+	friend class Engine;
+	
 	friend void to_json(nlohmann::json& j, const Tank& tank);
 	friend void from_json(const nlohmann::json& j, Tank& tank);
 
-
-	friend class Engine;
+	short health;
+	short score;
 
 	unsigned char max_speed;
 	float speed;
-
 	float handling;
+	short angle;
 
 	sf::Vector2f movement_vector;
-
-	short angle;
 	sf::Vector2f position;
-	Tank_barrel* barrel;
-
-	sf::Sprite* tank_body;
-
-	Skidmarks* skidmarks;	//slad po gasienicach - sa opcjonalne
-
-	short tank_id;
 
 	Names::tank_color my_color;
+	sf::Sprite* tank_body;
+	Tank_barrel* barrel;
+	Skidmarks* skidmarks;
 
+	short tank_id;
 	short cycle;
 public:
 	Tank(const sf::Sprite& tank_sprite, const Names::tank_color &color, Tank_barrel* new_barrel, Skidmarks* marks = nullptr);
 	~Tank();
-
 
 	void set_ID(const short& ID) { this->tank_id = ID;  }
 	void set_position(const sf::Vector2f& new_pos);
@@ -67,16 +59,14 @@ public:
 	void add_speed(const float& new_speed);
 	void set_angle(const short& new_angle);
 	void add_angle(const short& new_angle);
-
-	void update();
-	void draw(sf::RenderWindow& win, const bool &draw_skidmarks = false);
-
-	void draw_skidmarks(sf::RenderWindow& win);
-
 	void accelerate();
 	void decelerate();
 	void turn_left();
 	void turn_right();
+
+	void update();
+	void draw(sf::RenderWindow& win, const bool& draw_skidmarks = false);
+	void draw_skidmarks(sf::RenderWindow& win);
 
 	void control_death_cycles();
 };

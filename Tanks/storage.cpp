@@ -1,5 +1,6 @@
 #include "storage.h"
 
+
 const sf::IntRect Storage::sprite_rects[187] = {
 		sf::IntRect(513, 407, 20, 28), sf::IntRect(507, 515, 24, 24), sf::IntRect(513, 319, 20, 28), sf::IntRect(507, 443, 24, 24), sf::IntRect(414, 371, 20, 28), sf::IntRect(507, 491, 24, 24), sf::IntRect(512, 40, 20, 28), sf::IntRect(507, 467, 24, 24),
 		sf::IntRect(479, 499, 28, 28), sf::IntRect(479, 527, 28, 28), sf::IntRect(356, 555, 4, 10), sf::IntRect(544, 26, 8, 14), sf::IntRect(532, 48, 8, 12), sf::IntRect(438, 455, 12, 16), sf::IntRect(500, 130, 4, 14), sf::IntRect(513, 202, 8, 18),
@@ -24,7 +25,9 @@ const sf::IntRect Storage::sprite_rects[187] = {
 		sf::IntRect(128, 0, 64, 64), sf::IntRect(64, 448, 64, 64), sf::IntRect(0, 255, 64, 64), sf::IntRect(0, 191, 64, 64), sf::IntRect(0, 0, 64, 64), sf::IntRect(0, 383, 64, 64), sf::IntRect(320, 128, 64, 64), sf::IntRect(128, 448, 64, 64),
 		sf::IntRect(128, 384, 64, 64), sf::IntRect(128, 320, 64, 64), sf::IntRect(128, 256, 64, 64), sf::IntRect(128, 192, 64, 64), sf::IntRect(128, 128, 64, 64), sf::IntRect(128, 64, 64, 64), sf::IntRect(438, 403, 41, 52), sf::IntRect(439, 231, 41, 52),
 		sf::IntRect(476, 319, 37, 52), sf::IntRect(64, 192, 64, 64), sf::IntRect(312, 512, 8, 10), sf::IntRect(479, 371, 36, 36), sf::IntRect(506, 130, 26, 22), sf::IntRect(0, 447, 64, 64), sf::IntRect(328, 555, 8, 10), sf::IntRect(477, 185, 36, 36),
-		sf::IntRect(506, 152, 26, 22), sf::IntRect(432, 0, 44, 48), sf::IntRect(529, 174, 17, 70) };
+		sf::IntRect(506, 152, 26, 22), sf::IntRect(432, 0, 44, 48), sf::IntRect(529, 174, 17, 70),
+};
+
 
 const sf::IntRect Storage::sprite_rects_hq[187] = {
 	sf::IntRect(1016, 510, 40, 56), sf::IntRect(1014, 1032, 48, 48), sf::IntRect(1024, 0, 40, 56), sf::IntRect(1012, 809, 48, 48), sf::IntRect(828, 740, 40, 56), sf::IntRect(1014, 984, 48, 48), sf::IntRect(1016, 753, 40, 56), sf::IntRect(1014, 936, 48, 48),
@@ -50,5 +53,5 @@ const sf::IntRect Storage::sprite_rects_hq[187] = {
 	sf::IntRect(256, 128, 128, 128), sf::IntRect(256, 0, 128, 128), sf::IntRect(384, 640, 128, 128), sf::IntRect(0, 896, 128, 128), sf::IntRect(128, 128, 128, 128), sf::IntRect(0, 384, 128, 128), sf::IntRect(384, 128, 128, 128), sf::IntRect(384, 0, 128, 128),
 	sf::IntRect(256, 896, 128, 128), sf::IntRect(256, 768, 128, 128), sf::IntRect(256, 640, 128, 128), sf::IntRect(256, 512, 128, 128), sf::IntRect(256, 384, 128, 128), sf::IntRect(256, 256, 128, 128), sf::IntRect(951, 186, 82, 104), sf::IntRect(878, 465, 82, 104),
 	sf::IntRect(952, 649, 74, 104), sf::IntRect(128, 512, 128, 128), sf::IntRect(212, 1024, 16, 20), sf::IntRect(952, 92, 72, 72), sf::IntRect(878, 569, 52, 44), sf::IntRect(128, 0, 128, 128), sf::IntRect(624, 1024, 16, 20), sf::IntRect(954, 362, 72, 72),
-	sf::IntRect(960, 809, 52, 44), sf::IntRect(863, 186, 88, 95), sf::IntRect(1028, 566, 33, 139)
+	sf::IntRect(960, 809, 52, 44), sf::IntRect(863, 186, 88, 95), sf::IntRect(1028, 566, 33, 139),
 };
