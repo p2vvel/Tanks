@@ -26,8 +26,7 @@
 #define GET_SPRITE_HQ(NAME) (storage.sprite_rects_hq[Storage::sprite_index::NAME])
 
 
-#define ADDRESS "127.0.0.1"
-#define PORT 3003
+
 
 
 #include "names.h"
@@ -44,7 +43,7 @@ class Engine
 
 public:
 	Engine();
-	Engine(sf::RenderWindow& win);
+	Engine(sf::RenderWindow& win, const unsigned short& server_port, const std::string& server_address);
 	~Engine();
 
 	static const sf::Vector2f& calculate_vector(const float& distance_, const short& angle_);

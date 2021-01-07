@@ -34,7 +34,7 @@ class NetClient
 
 public:
 
-	NetClient(const unsigned short& server_port = 3000, const std::string& server_address = "127.0.0.1");
+	NetClient(const unsigned short& server_port, const std::string& server_address);
 	~NetClient();
 
 	const bool& succesfullConnection() const { return this->connected_to_server;  }

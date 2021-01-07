@@ -2,7 +2,6 @@ import TanksServer from "./tanks_server.js";
 
 
 
-
-
-
-const Server = new TanksServer(3003);
+const port = process.argv[2] || 3003;;
+console.log(`Server running at port ${port}`);
+const Server = new TanksServer(port);

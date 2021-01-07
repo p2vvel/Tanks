@@ -9,9 +9,9 @@ Engine::Engine() {
 }
 
 
-Engine::Engine(sf::RenderWindow& win) {
+Engine::Engine(sf::RenderWindow& win, const unsigned short& server_port, const std::string& server_address) {
 	window = &win;
-	net_client = new NetClient(PORT, ADDRESS);
+	net_client = new NetClient(server_port, server_address);
 }
 
 
